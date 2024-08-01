@@ -1,13 +1,8 @@
-<?php 
-
-
-?>
-
 <head>
-    <link rel='stylesheet' href='/AoSTurnReminder/css/style.css'></link>
-    <script src='/AoSTurnReminder/js/loading.js'></script>
-    <script src='/AoSTurnReminder/js/parsing.js'></script>
-    <script src='/AoSTurnReminder/js/ui.js'></script>
+    <link rel='stylesheet' href='style.css'></link>
+    <script src='oading.js'></script>
+    <script src='parsing.js'></script>
+    <script src='ui.js'></script>
     
 </head>
 <body>
