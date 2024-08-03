@@ -70,8 +70,12 @@ function parseImportText(){
     let importList = {
         "armyName":null,
         "faction":null,
+        "battleFormation":null,
         "units":[],
         "regimentsOfRenown": [],
+        "spellLore":null,
+        "prayerLore":null,
+        "manifestationLore":null,
         "parseErrors":[],
         "rawInput": importListRaw
     };
@@ -92,6 +96,25 @@ function parseImportText(){
         //Get Faction
         if(parsedData["Factions"].includes(row.trim().replace("Realm-lord","Realmlord"))){
             importList["faction"] = row;
+            //Get Battle Formation
+            row = importListRaw[++i];
+            importList["battleFormation"] = row;
+
+        }
+        //Get Spell Lore name
+        if(row.includes("Spell Lore")){
+            let spellLore = row.split("-")[1].trim();
+            importList["spellLore"] = {name:spellLore,abilities:[]};
+        }
+        //Get Prayer Lore name
+        if(row.includes("Prayer Lore")){
+            let prayerLore = row.split("-")[1].trim();
+            importList["prayerLore"] = {name:prayerLore,abilities:[]};
+        }
+        //Get Manifestation Lore name
+        if(row.includes("Manifestation Lore")){
+            let manifestationLore = row.split("-")[1].trim();
+            importList["manifestationLore"] = {name:manifestationLore,abilities:[]};
         }
         //Get Unit name
         if(row.includes("(")){
@@ -235,28 +258,43 @@ function createPhaseDiv(phase,abilities){
     
 
     if(phase == "your" || phase == "enemy"){
-        Object.entries(abilities).forEach(([_phase,_abilities])=>{
+        Object.entries(abilities).forEach(([_phase,profiles])=>{
+            let _abilities = profiles.Abilities;
+            let _weapons = profiles.Weapons;
             if(_phase=="other"){
                 if(_abilities.length>0)
-                console.log(phase + "_" + _phase,_abilities);
+                    console.log(phase + "_" + _phase,_abilities);
+                if(_weapons?.length>0)
+                    console.log(phase + "_" + _phase,_weapons);
                 return;
             }
-            if(_abilities.length == 0) return;
-            phaseDiv.appendChild(createPhaseDiv(phase.slice(0,1).toUpperCase() + phase.slice(1) +" " +_phase,_abilities));
+            if(_abilities.length > 0 || _weapons?.length > 0)
+                phaseDiv.appendChild(createPhaseDiv(phase.slice(0,1).toUpperCase() + phase.slice(1) +" " +_phase,profiles));
         });
         
     }else if(phase != "other"){
 
-        header.appendChild(title);
-        abilities.forEach(ability=>{
+        header.appendChild(title); 
+        let _abilities = abilities;
+        if(abilities?.Abilities != undefined){
+            _abilities = abilities.Abilities;
+        }
+        _abilities.forEach(ability=>{
             let abilityDiv = createAbilityDiv(ability);
             if(abilityDiv)
                 body.appendChild(abilityDiv);
         })
+        let _weapons = abilities.Weapons;
+        if(_weapons != undefined){
+            _weapons.forEach(weapon=>{
+                let weaponDiv = createAbilityDiv(weapon);
+                if(weaponDiv)
+                    body.appendChild(weaponDiv);
+            })
+        }
 
-
-    }else{
-        let otherAbilities = {};
+    }else{  
+        
         Object.entries(abilities).forEach(([_phase,_abilities])=>{
             if(_abilities.length)console.log(phase+"_"+_phase,_abilities);
         })
@@ -277,7 +315,7 @@ function createPhaseDiv(phase,abilities){
 function createAbilityDiv(ability){
     let abilityDiv = document.createElement("div");
     let abTitle = document.createElement("span");
-    abTitle.innerHTML = ability.name;
+    abTitle.innerHTML = ability.name + " - " + ability.typeName;
     abilityDiv.appendChild(abTitle);
 
     let showWeapon = document.getElementById("showWeaponChk").checked;

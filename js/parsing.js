@@ -5,7 +5,7 @@ function linkListData(list){
     list.abilities = {};
     //battle traits
     let battleTraitProfiles = _data.rules.querySelectorAll("sharedSelectionEntries selectionEntry profiles profile");
- 
+    //console.log(battleTraitProfiles);
     battleTraitProfiles.forEach(profile=>{
         let name = profile.attributes.name.value;
         let id = profile.attributes.id.value;
@@ -16,26 +16,97 @@ function linkListData(list){
     });
 
     //battle formation ability
-
-    //Spell lore
-
-    //prayer lore
-
-    //manifestation lore
-
+    let battleFormationEntries = _data.rules.querySelectorAll('selectionEntryGroup[name="Battle Formations: '+list.faction+'"] selectionEntries selectionEntry');
+    //console.log(battleFormationEntries);
+    battleFormationEntries.forEach(entry => {
+        let _battleFormation = entry.attributes.name.value;
+        if(_battleFormation == list.battleFormation){
+            parseProfiles(list,entry);
+        }
+    });
+    //Spell Lore
+    if(list.spellLore?.abilities != undefined){
+        let spellLoreEntries = _data.rules.querySelectorAll('selectionEntryGroup[name="Spell Lores"] selectionEntries selectionEntry');
+        //console.log(spellLoreEntries);
+        spellLoreEntries.forEach(entry => {
+            //console.log(entry)
+            let _spellLore = entry.attributes.name.value;
+            if(_spellLore == list.spellLore.name){
+                //console.log("parsing profile " + _spellLore)
+                parseProfiles(list,entry,null,list.spellLore,true);
+            }
+        });
+        if(list.spellLore.abilities.length == 0){
+            logParseError("Spell Lore",list.spellLore.name,list);
+        }
+    }
+    //Prayer Lore
+    if(list.prayerLore?.abilities != undefined){
+        let prayerLoreEntries = _data.rules.querySelectorAll('selectionEntryGroup[name="Prayer Lores"] selectionEntries selectionEntry');
+        //console.log(prayerLoreEntries);
+        prayerLoreEntries.forEach(entry => {
+            //console.log(entry)
+            let _prayerLore = entry.attributes.name.value;
+            if(_prayerLore == list.prayerLore.name){
+                parseProfiles(list,entry,null,list.prayerLore,true);
+            }
+        });
+        if(list.prayerLore.abilities.length == 0){
+            logParseError("Prayer Lore",list.prayerLore.name,list);
+        }
+    }
+    //Manifestation Lore
+    //console.log(list.manifestationLore)
+    if(list.manifestationLore?.abilities != undefined){
+        let factionManifestationLoreEntries = _data.rules.querySelectorAll('selectionEntryGroup[name="Manifestation Lores"] selectionEntries selectionEntry');
+        //console.log(manifestationLoreEntries);
+        factionManifestationLoreEntries.forEach(entry => {
+            //console.log(entry)
+            let _manifestationLore = entry.attributes.name.value;
+            if(_manifestationLore == list.manifestationLore.name){
+                //console.log("parsing profile " + _manifestationLore)
+                parseProfiles(list,entry,null,list.manifestationLore,true);
+                //add manifestation units to units list
+                addManifestationsToList(list,entry);
+            }
+        });
+        //check manifestations from core rules
+        let generalManifestationLoreEntries = data.core.querySelectorAll('selectionEntryGroup[name="Manifestation Lores"] selectionEntries selectionEntry');
+        //console.log(generalManifestationLoreEntries);
+        generalManifestationLoreEntries.forEach(entry => {
+            //console.log(entry)
+            let _manifestationLore = entry.attributes.name.value;
+            //console.log(_manifestationLore,list.manifestationLore.name);
+            if(_manifestationLore == list.manifestationLore.name){
+                //console.log("parsing profile " + _manifestationLore)
+                parseProfiles(list,entry,null,list.manifestationLore,true);
+                //add manifestation units to units list
+                addManifestationsToList(list,entry);
+            }
+        });
+        //console.log(list.manifestationLore.abilities)
+        if(list.manifestationLore.abilities.length == 0){
+            logParseError("Manifestation Lore",list.manifestationLore.name,list);
+        }
+    }
     //unit abilities
     //console.log(_data);
     list.units.forEach((unit,unit_idx)=>{
         let _unit = _data.units.querySelector('[type="unit"][name="'+unit.unitName+'" i]');
+        //look in core rules for manifestations if unit wasn't found
         if(!_unit){
-            let msg = "Could not find data for Unit: [" + unit.unitName + "]";
+            _unit = data.core.querySelector('[name="'+unit.unitName+'" i]');
+        }
+        if(!_unit){
+
+            let msg = "Could not find data for "+((unit?.type == "manifestation")?("Manifestation"):("Unit"))+": [" + unit.unitName + "]";
             if(!list.parseErrors)list.parseErrors = [];
             list.parseErrors.push({msg,'str':unit.unitName})
             console.error(msg);
             return;
         }
         //get abilities
-       
+        //console.log(_unit)
         parseProfiles(list,_unit,unit_idx,unit);
        
         //add enhancements if unit has any
@@ -43,16 +114,23 @@ function linkListData(list){
             
             Object.keys(unit.enhancements).forEach(enhancement=>{
                 let profile = _data.rules.querySelector('profile[name="'+enhancement+'"]');
-                if(!profile)return;
-                let name = profile.attributes.name.value;
-                let id = profile.attributes.id.value;
-                if(!list.abilities[id]){
-               
-                    list.abilities[id] = parseAbility(profile);
-                    //console.log(list.abilities[id])
+                if(profile){
+                    let name = profile.attributes.name.value;
+                    let id = profile.attributes.id.value;
+                    if(!list.abilities[id]){
+                
+                        list.abilities[id] = parseAbility(profile);
+                        //console.log(list.abilities[id])
+                    }
+                    list.abilities[id].units.push(unit_idx);
+                    unit.abilities.push({id,name});
+                }else{
+                    //check for wargear options
+                    let wargearData = _data.units.querySelector('[name="'+enhancement+'"]');
+                    if(wargearData){
+                        parseProfiles(list,wargearData,unit_idx,unit,true);
+                    }
                 }
-                list.abilities[id].units.push(unit_idx);
-                unit.abilities.push({id,name});
             })
         }
         //console.log(unit.unitName,_data.units.querySelector('[name="'+unit.unitName+'"]'))
@@ -86,25 +164,48 @@ function linkListData(list){
    
 }
 
-function parseProfiles(list,xmlData,unit_idx = null,unit = null){
-    let RoRProfiles = xmlData.querySelectorAll('profile');
-    RoRProfiles.forEach(profile=>{
-    
+function logParseError(parseType,parseName,list){
+    let msg = "Could not find data for "+parseType+": [" + parseName + "]";
+    if(!list.parseErrors)list.parseErrors = [];
+    list.parseErrors.push({msg,'str':parseName})
+    console.error(msg);
+    return;
+}
+
+function addManifestationsToList(list,entry){
+    let profiles = entry.querySelectorAll('profile');
+    profiles.forEach(profile=>{
+        
+        let manifestationName = profile.attributes.name.value.slice(7);
+        manifestationName = manifestationName.replace('’',"'");//standardise the symbols
+        list.units.push({unitName:manifestationName,abilities:[],type:"manifestation"});
+    })
+}
+
+function parseProfiles(list,xmlData,unit_idx = null,unit = null,wargear = false){
+    let query = 'profile';
+    if(!wargear) 
+        query = 'profile:not(selectionEntryGroup[name="Wargear Options"]>*>*>*>*>*>profile)';
+    let profiles = xmlData.querySelectorAll(query);
+    let invalidTypeNames = ["Unit","Manifestation"];
+    profiles.forEach(profile=>{
+        //console.log(profile);
         let typeId = profile.attributes.typeId.value;
-        if(PROFILE[typeId].name == "Unit"){
+        if(invalidTypeNames.includes(PROFILE[typeId].name)){
             return;
         }
         let name = profile.attributes.name.value;
         let id = profile.attributes.id.value;
-        
+       
         if(!list.abilities[id]){
            
             list.abilities[id] = parseAbility(profile);
         }
-        if(unit_idx && unit){
+        if(unit_idx !== null && unit){
             list.abilities[id].units.push(unit_idx);
-            unit.abilities.push({id,name});
         }
+        if(unit !== null)
+            unit.abilities.push({id,name});
     })
 }
 
@@ -134,40 +235,40 @@ function parseAbility(profile){
 function sortAbilitiesByPhase(list){
     if(list.phases){
         console.log("already sorted",list.phases);
-        return;
+        //return;
     }
      //sort abilities by phase
      let phases = {
         deployment:[],
         start_of_battle_round:[],
         your:{
-            Hero:[],
-            Movement:[],
-            Shooting:[],
-            Charge:[],
-            Combat:[],
-            EndOfTurn:[],
-            other:[]
+            Hero:{Passive:[],Abilities:[]},
+            Movement:{Passive:[],Abilities:[]},
+            Shooting:{Passive:[],Abilities:[],Weapons:[]},
+            Charge:{Passive:[],Abilities:[]},
+            Combat:{Passive:[],Abilities:[],Weapons:[]},
+            EndOfTurn:{Passive:[],Abilities:[]},
+            other:{Passive:[],Abilities:[]},
         },
         enemy:{
-            Hero:[],
-            Movement:[],
-            Shooting:[],
-            Charge:[],
-            Combat:[],
-            EndOfTurn:[],
-            other:[]
+            Hero:{Passive:[],Abilities:[]},
+            Movement:{Passive:[],Abilities:[]},
+            Shooting:{Passive:[],Abilities:[],Weapons:[]},
+            Charge:{Passive:[],Abilities:[]},
+            Combat:{Passive:[],Abilities:[],Weapons:[]},
+            EndOfTurn:{Passive:[],Abilities:[]},
+            other:{Passive:[],Abilities:[]},
         },
         passive:[],
         reaction:[],
         other:{
-            Hero:[],
-            Movement:[],
-            Shooting:[],
-            Charge:[],
-            Combat:[],
-            EndOfTurn:[],
-            other:[]
+            Hero:{Passive:[],Abilities:[]},
+            Movement:{Passive:[],Abilities:[]},
+            Shooting:{Passive:[],Abilities:[],Weapons:[]},
+            Charge:{Passive:[],Abilities:[]},
+            Combat:{Passive:[],Abilities:[],Weapons:[]},
+            EndOfTurn:{Passive:[],Abilities:[]},
+            other:{Passive:[],Abilities:[]},
         }
     }
 
@@ -185,13 +286,13 @@ function sortAbilitiesByPhase(list){
             return;
         }
         if(ability.typeName.includes("Melee Weapon")){
-            phases.your.Combat.push(ability);//.id;
-            phases.enemy.Combat.push(ability);//.id;
+            phases.your.Combat.Weapons.push(ability);//.id;
+            phases.enemy.Combat.Weapons.push(ability);//.id;
             return;
         }
         if(ability.typeName.includes("Ranged Weapon")){
-            phases.your.Shooting.push(ability);//.id;
-            phases.enemy.Shooting.push(ability);//.id;
+            phases.your.Shooting.Weapons.push(ability);//.id;
+            phases.enemy.Shooting.Weapons.push(ability);//.id;
             return;
         }
         if(ability.chars?.Timing?.includes("Reaction")){
@@ -227,12 +328,13 @@ function sortAbilitiesByPhase(list){
         }else{
             phase = "other";
         }
+
         if(turn != "any"){
-            phases[turn][phase].push(ability);//.id;
+            phases[turn][phase].Abilities.push(ability);//.id;
         }else{
             
-            phases.your[phase].push(ability);//.id;
-            phases.enemy[phase].push(ability);//.id;
+            phases.your[phase].Abilities.push(ability);//.id;
+            phases.enemy[phase].Abilities.push(ability);//.id;
         }
         
     });
