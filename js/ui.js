@@ -7,11 +7,13 @@ var parsedData = {
     "Lists": [],
 };
 var PROFILE = {};
-
+//IndexedDB link
 var db;
-//TODO 
-// battle formation ability
-// RoR ability and RoR unit abilities
+
+const DEBUG = {
+    errors:[],
+
+};
 
 
 document.addEventListener("DOMContentLoaded", init);
@@ -25,8 +27,53 @@ async function init(){
     
     //load stored lists from cache
     loadExistingLists();
+
+    const error = console.error.bind(console)
+    console.error = (...args) => {
+        //error logging
+        if(args.length == 1){
+            DEBUG.errors.push(args[0]);
+        } else {
+            DEBUG.errors.push(args);
+        }
+        document.getElementById("debugBtn").style.display = "";
+        error(...args)
+    }
+
 }
 
+function downloadDebugJson(){
+
+    let link = document.createElement('a');
+    link.setAttribute('download', 'AoSReminders_debug.json');
+    link.href = makeTextFile(JSON.stringify({"ConsoleErrors":DEBUG.errors,"Lists":parsedData.Lists}));
+    document.body.appendChild(link);
+
+    window.requestAnimationFrame(function () {
+        var event = new MouseEvent('click');
+        link.dispatchEvent(event);
+        document.body.removeChild(link);
+        alert("Please send the AoSReminders_debug.json in a message to the dev if you know him.");
+    });
+    
+    
+}
+
+var textFile = null;
+function makeTextFile (text) {
+    var data = new Blob([text], {type: 'application/json'});
+
+    // If we are replacing a previously generated file we need to
+    // manually revoke the object URL to avoid memory leaks.
+    if (textFile !== null) {
+      window.URL.revokeObjectURL(textFile);
+    }
+
+    textFile = window.URL.createObjectURL(data);
+
+    // returns a URL you can use as a href
+    return textFile;
+  };
 
 
 function loadExistingLists(){
