@@ -15,7 +15,6 @@ const DEBUG = {
 
 };
 
-
 document.addEventListener("DOMContentLoaded", init);
 
 async function init(){
@@ -153,13 +152,16 @@ function nrParse(importListRaw){
             importList["battleFormation"] = row.split(":")[1].trim();
         }
         else if(row.includes("Manifestation Lore")){
-            importList["manifestationLore"] = row.split(":")[1].trim();
+            let manifestationLore = row.split(":")[1].trim();
+            importList["manifestationLore"] = {name:manifestationLore,abilities:[]};
         }
         else if(row.includes("Prayer Lore")){
-            importList["prayerLore"] = row.split(":")[1].trim();
+            let prayerLore = row.split(":")[1].trim();
+            importList["prayerLore"] = {name:prayerLore,abilities:[]};
         }
         else if(row.includes("Spell Lore")){
-            importList["spellLore"] = row.split(":")[1].trim();
+            let spellLore = row.split(":")[1].trim();
+            importList["spellLore"] = {name:spellLore,abilities:[]};
         }
         else if(row.includes("FACTION TERRAIN")){
             row = importListRaw[++i];
@@ -418,7 +420,7 @@ function createPhaseDiv(phase,abilities){
                 phaseDiv.appendChild(createPhaseDiv(phase.slice(0,1).toUpperCase() + phase.slice(1) +" " +_phase,profiles));
         });
         
-    }else if(phase != "other"){
+    }else {//if(phase != "other"){ display abilities with missing timings in own div at end
 
         header.appendChild(title); 
         let _abilities = abilities;
@@ -439,13 +441,9 @@ function createPhaseDiv(phase,abilities){
             })
         }
 
-    }else{  
-        
-        Object.entries(abilities).forEach(([_phase,_abilities])=>{
-            if(_abilities.length)console.log(phase+"_"+_phase,_abilities);
-        })
-        //console.log(phase,abilities);
-    }
+    }/*else{  
+        console.log(phase,abilities);
+    }*/
     while(phase.includes("_")){
         let i = phase.indexOf("_");
         phase = phase.slice(0,i) + " " + phase.slice(i+1,i+2).toUpperCase() + phase.slice(i+2);
@@ -463,6 +461,8 @@ function createAbilityDiv(ability){
     let abTitle = document.createElement("span");
     abTitle.innerHTML = ability.name + " - " + ability.typeName;
     abilityDiv.appendChild(abTitle);
+    let containerDiv = document.createElement("div");
+    abilityDiv.appendChild(containerDiv);
 
     let showWeapon = document.getElementById("showWeaponChk").checked;
     if(['Melee Weapon','Ranged Weapon'].includes(ability.typeName)){
@@ -474,13 +474,13 @@ function createAbilityDiv(ability){
 
     Object.entries(ability.chars).forEach(([key,value])=>{
         let div = createAbilityCharDiv(key,value);
-        abilityDiv.appendChild(div);
+        containerDiv.appendChild(div);
     });
     let unitsDiv = document.createElement("div");
     let unTitle = document.createElement("label");
     unTitle.innerHTML = "Units";
     unitsDiv.appendChild(unTitle);
-    ability.units.forEach(unitIdx=>{
+    ability.units?.forEach(unitIdx=>{
         let unit = null;
         if(typeof(unitIdx) == "string" && unitIdx?.slice(0,1) == 'r'){
             let ror_idx = unitIdx.slice(1).split('_')[0];
@@ -493,7 +493,7 @@ function createAbilityDiv(ability){
         span.innerHTML = unit.unitName;
         unitsDiv.appendChild(span);
     })
-    abilityDiv.appendChild(unitsDiv);
+    containerDiv.appendChild(unitsDiv);
     return abilityDiv;
 }
 
@@ -504,6 +504,7 @@ function createAbilityCharDiv(char,val){
     label.innerHTML = char;
     //do any keyword "bolding"
     while(val.includes("**^^")){
+        val = val.slice(0,val.indexOf("**^^")) + val.slice(val.indexOf("**^^"),val.indexOf("^^**")).toUpperCase() + val.slice(val.indexOf("^^**"))
         val = val.replace("**^^","<b>");
         val = val.replace("^^**","</b>");
     }
@@ -517,6 +518,11 @@ function createAbilityCharDiv(char,val){
         val = val.replace("*","<i>");
         val = val.replace("*","</i>");
     }
+    //do line breakes
+    while(val.includes("\n")){//
+        val = val.replace("\n","<br>");
+    }
+    
     span.innerHTML=val;
     div.appendChild(label);
     div.appendChild(span);
