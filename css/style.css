@@ -33,7 +33,7 @@ body {
     height: 50px;
     position: absolute;
     top: calc(50% - 25px);
-    left: -25;
+    left: calc(100% - 25px);
     background-color: yellow;
   }
 }
