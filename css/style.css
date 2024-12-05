@@ -9,29 +9,41 @@ body {
     overflow-y: hidden;
     overflow-x: hidden;
   }
-  #container{
+  #container {
     display: block;
+    position: relative;
   }
-  #importDiv {
+  .pageContainer {
+    position: fixed;
+    top: 10vw;
     width: 100%;
     height: 100%;
+  }
+  #importDiv {
     background-color: red;
   }
   #unitContainer {
-    width: 100%;
-    height: 100%;
     background-color: green;
   }
   #phaseContainer {
-    width: 100%;
-    height: 100%;
     background-color: orange;
+  }
+  #PageButton {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: calc(50% - 25px);
+    left: -25;
+    background-color: yellow;
   }
 }
 @media only screen and (min-width: 600px) {
   #container{
     display: flex;
     gap: 10px;
+  }
+  #PageButton {
+    display: none;
   }
 }
 

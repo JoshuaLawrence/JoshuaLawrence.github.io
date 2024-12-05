@@ -9,13 +9,13 @@
 <body>
     <h1>AoS4 Turn Reminder</h1>
     <div id="container">
-        <div id="importDiv">
+        <div id="importDiv" class="pageContainer">
             <textarea id="ListImport" cols="30" rows="30">
             </textarea>
             <br>
             <input type="button" value="Import" onclick="importArmyList();"/>
         </div>
-        <div id="phaseContainer">
+        <div id="phaseContainer" class="pageContainer">
             <select id="listSel" style="width:150px;" onchange="loadList(this.value);">
             </select>
             <input type="button" value="X" onclick="removeSelectedList();" title="Delete selected list"/>
@@ -29,8 +29,11 @@
             <div id="phaseView">
             </div>
         </div>
-        <div id="unitContainer">
+        <div id="unitContainer" class="pageContainer">
 
         </div>
+    </div>
+    <div id="PageButton">
+
     </div>
 </body>
