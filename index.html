@@ -7,30 +7,36 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
 </head>
 <body>
-    <h1>AoS4 Turn Reminder</h1>
+    <h1 id="pageTitle">AoS4 Turn Reminder</h1>
     <div id="container">
         <div id="importDiv" class="pageContainer">
-            <textarea id="ListImport" cols="30" rows="30">
-            </textarea>
-            <br>
-            <input type="button" value="Import" onclick="importArmyList();"/>
+            <div class="pageBorder">
+                <textarea id="ListImport" cols="30" rows="30">
+                </textarea>
+                <br>
+                <input type="button" value="Import" onclick="importArmyList();"/>
+            </div>
         </div>
         <div id="phaseContainer" class="pageContainer">
-            <select id="listSel" style="width:150px;" onchange="loadList(this.value);">
-            </select>
-            <input type="button" value="X" onclick="removeSelectedList();" title="Delete selected list"/>
-            <input type="button" value="<" onclick="loadImportText();" title="Load Import Text"/>
-            <span>Show Weapon Profiles</span>
-            <input id="showWeaponChk" type="checkbox" onchange="loadList()"/>
-            <input id="debugBtn" type="button" value="Download Errors Debug File" onclick="downloadDebugJson()" style="display:none;">
-            <br>
-            <div id="listView">
-            </div>
-            <div id="phaseView">
+            <div class="pageBorder">
+                <select id="listSel" style="width:150px;" onchange="loadList(this.value);">
+                </select>
+                <input type="button" value="X" onclick="removeSelectedList();" title="Delete selected list"/>
+                <input type="button" value="<" onclick="loadImportText();" title="Load Import Text"/>
+                <span>Show Weapon Profiles</span>
+                <input id="showWeaponChk" type="checkbox" onchange="loadList()"/>
+                <input id="debugBtn" type="button" value="Download Errors Debug File" onclick="downloadDebugJson()" style="display:none;">
+                <br>
+                <div id="listView">
+                </div>
+                <div id="phaseView">
+                </div>
             </div>
         </div>
         <div id="unitContainer" class="pageContainer">
+            <div class="pageBorder">
 
+            </div>
         </div>
     </div>
     <div id="pageButton1" class="PageButton"></div>
