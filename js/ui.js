@@ -512,6 +512,7 @@ function createPhaseDiv(phase,abilities){
     phaseDiv.appendChild(header);
     phaseDiv.appendChild(body);
 
+    header.classList.add("phaseTitleDiv");
 
     let title = document.createElement("h1");
     
