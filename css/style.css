@@ -46,6 +46,13 @@ body {
     border: solid white 2px;
     position: absolute;
     height: 92%;
+    overflow: hidden;
+    overflow-y: scroll;
+  }
+  .abilityDiv , .weaponProfileDiv {
+    width: unset !important;
+    left: 5px;
+    right: 5px;
   }
 }
 @media only screen and (min-width: 600px) {
