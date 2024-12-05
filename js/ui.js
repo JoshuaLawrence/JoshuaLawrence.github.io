@@ -38,7 +38,28 @@ async function init(){
         document.getElementById("debugBtn").style.display = "";
         error(...args)
     }
+    let pageButton = document.getElementById("PageButton");
+    pageButton.addEventListener("touchmove",handlePageButtonTouchMove);
+    pageButton.addEventListener("touchend",handlePageButtonTouchEnd);
 
+}
+//moves the page button with the touch movement
+function handlePageButtonTouchMove(event){
+    let pageButton = document.getElementById("PageButton");
+    let position = event.touches[0].clientX;
+    if(position <= 25)position = 25;
+    if(position + 25 > window.screen.width)position = window.screen.width-25;
+    pageButton.style.left = position - 25;
+}
+//snap the button to the left or the right of the screen
+function handlePageButtonTouchEnd(event){
+    let pageButton = document.getElementById("PageButton");
+    let position = parseInt(pageButton.style.left);
+    if(position < window.screen.width/2){
+        pageButton.style.left = -25;
+    }else{
+        pageButton.style.left = window.screen.width-25;
+    }
 }
 
 function downloadDebugJson(){
