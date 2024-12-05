@@ -75,6 +75,7 @@ async function init(){
 }
 //inits the page buttons and pages
 function handlePageButtonTouchStart(event){
+    event.target.style.zIndex = 110;
     let position = event.touches[0].clientX;
     pageStart = position < window.screen.width/2;
 
@@ -116,6 +117,7 @@ function handlePageButtonTouchMove(event){
 }
 //snap the button to the left or the right of the screen
 function handlePageButtonTouchEnd(event){
+    event.target.style.zIndex = 100;
     let pageButton = event.target;
     let position = parseInt(pageButton.style.left);
     var lastPage = document.getElementById(PAGES.getPageID(currentPage));
