@@ -14,6 +14,23 @@ const DEBUG = {
     errors:[],
 
 };
+const PAGES = {
+    IMPORT: 0,
+    PHASES: 1,
+    UNITS: 2,
+    getPageID: (id)=>{
+        if(id < 0) id = 0;
+        if(id > 2) id = 2;
+        return PAGES[id];
+    },
+    0: "importDiv",
+    1: "phaseContainer",
+    2: "unitContainer"
+}
+var currentPage = 0;
+var lastPage = 0;
+var nextPage = 1;
+var pageStart = false;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -38,27 +55,92 @@ async function init(){
         document.getElementById("debugBtn").style.display = "";
         error(...args)
     }
-    let pageButton = document.getElementById("PageButton");
-    pageButton.addEventListener("touchmove",handlePageButtonTouchMove);
-    pageButton.addEventListener("touchend",handlePageButtonTouchEnd);
+    let pageButtons = document.getElementsByClassName("PageButton");
+    for(let i = 0; i < pageButtons.length; i++){
+        let pageButton = pageButtons[i];
+        pageButton.addEventListener("touchstart",handlePageButtonTouchStart);
+        pageButton.addEventListener("touchmove",handlePageButtonTouchMove);
+        pageButton.addEventListener("touchend",handlePageButtonTouchEnd);
+    }
+    
 
+}
+//inits the page buttons and pages
+function handlePageButtonTouchStart(event){
+    let position = event.touches[0].clientX;
+    pageStart = position < window.screen.width/2;
+
+    var lastPage = document.getElementById(PAGES.getPageID(currentPage));
+    
+    if(!pageStart){
+        nextPage=currentPage+1;
+    }else{
+        nextPage=currentPage-1;
+    }
+    var page = document.getElementById(PAGES.getPageID(nextPage));
+    if(!pageStart){
+        page.style.left = window.screen.width;
+    }else{
+        page.style.left = -window.screen.width;
+    }
+    
+    lastPage.style.zIndex = 0;
+    page.style.zIndex = 10;
 }
 //moves the page button with the touch movement
 function handlePageButtonTouchMove(event){
-    let pageButton = document.getElementById("PageButton");
+    let pageButton = event.target;
     let position = event.touches[0].clientX;
+    
+
     if(position <= 25)position = 25;
     if(position + 25 > window.screen.width)position = window.screen.width-25;
     pageButton.style.left = position - 25;
+    var page = document.getElementById(PAGES.getPageID(nextPage));
+    if(!pageStart){
+        //swiping from right
+        page.style.right = "unset";
+        page.style.left = pageButton.getBoundingClientRect().right - 25;
+    }else{
+        page.style.left = "unset";
+        page.style.left = pageButton.getBoundingClientRect().left + 25 -window.screen.width;
+    }
 }
 //snap the button to the left or the right of the screen
 function handlePageButtonTouchEnd(event){
-    let pageButton = document.getElementById("PageButton");
+    let pageButton = event.target;
     let position = parseInt(pageButton.style.left);
+    var lastPage = document.getElementById(PAGES.getPageID(currentPage));
+    var page = document.getElementById(PAGES.getPageID(nextPage));
+    page.style.left = "unset";
+    page.style.right = "unset";
+    lastPage.style.left = "unset";
+    lastPage.style.right = "unset";
+
     if(position < window.screen.width/2){
         pageButton.style.left = -25;
+        if(currentPage > nextPage){//didn't swipe over halfway
+            page.style.zIndex = -1;
+            lastPage.style.zIndex = 10;
+            //console.log("last page - not past halfway")
+        }else{
+            currentPage = nextPage;
+            page.style.zIndex = 10;
+            lastPage.style.zIndex = -1;
+            //console.log("next page")
+        }
     }else{
         pageButton.style.left = window.screen.width-25;
+        if(currentPage < nextPage){//didn't swipe over halfway
+            page.style.zIndex = -1;
+            lastPage.style.zIndex = 10;
+            //console.log("last page - not past halfway")
+        }else{
+            currentPage = nextPage;
+            page.style.zIndex = 10;
+            lastPage.style.zIndex = -1;
+            //console.log("last page")
+        }
     }
 }
 

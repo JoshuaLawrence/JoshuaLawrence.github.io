@@ -18,9 +18,11 @@ body {
     top: 10vw;
     width: 100%;
     height: 100%;
+    z-index: -1;
   }
   #importDiv {
     background-color: red;
+    z-index: 0;
   }
   #unitContainer {
     background-color: green;
@@ -28,13 +30,14 @@ body {
   #phaseContainer {
     background-color: orange;
   }
-  #PageButton {
+  .PageButton {
     width: 50px;
     height: 50px;
     position: absolute;
     top: calc(50% - 25px);
     left: calc(100% - 25px);
-    background-color: yellow;
+    background-color: blue;
+    z-index: 100;
   }
 }
 @media only screen and (min-width: 600px) {
@@ -42,7 +45,7 @@ body {
     display: flex;
     gap: 10px;
   }
-  #PageButton {
+  .PageButton {
     display: none;
   }
 }
