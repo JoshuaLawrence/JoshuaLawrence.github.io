@@ -23,9 +23,17 @@ const PAGES = {
         if(id > 2) id = 2;
         return PAGES[id];
     },
+    getPageName: (id)=>{
+        if(id < 0) id = 0;
+        if(id > 2) id = 2;
+        return PAGES[id+"name"];
+    },
     0: "importDiv",
     1: "phaseContainer",
-    2: "unitContainer"
+    2: "unitContainer",
+    "0name": "List Import",
+    "1name": "Phases",
+    "2name": "Units"
 }
 var currentPage = 0;
 var lastPage = 0;
@@ -62,7 +70,7 @@ async function init(){
         pageButton.addEventListener("touchmove",handlePageButtonTouchMove);
         pageButton.addEventListener("touchend",handlePageButtonTouchEnd);
     }
-    
+    pageTitle.innerHTML = PAGES.getPageName(currentPage);
 
 }
 //inits the page buttons and pages
@@ -142,6 +150,7 @@ function handlePageButtonTouchEnd(event){
             //console.log("last page")
         }
     }
+    pageTitle.innerHTML = PAGES.getPageName(currentPage);
 }
 
 function downloadDebugJson(){
