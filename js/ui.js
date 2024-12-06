@@ -363,7 +363,7 @@ function gwParse(importListRaw){
             continue;
         }
         //Get Faction
-        if(parsedData["Factions"].includes(row.trim().replace("Realm-lord","Realm"))){
+        if(parsedData["Factions"].includes(row.trim().replace("Realm-lord","Realmlords"))){
             importList["faction"] = row;
             //Get Battle Formation
             row = importListRaw[++i];
