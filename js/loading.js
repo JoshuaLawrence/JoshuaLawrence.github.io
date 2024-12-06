@@ -209,7 +209,7 @@ function loadRoRLibs(){
 
 async function loadFaction(faction = null, force=false){
     if(faction === null){
-        faction = document.getElementById('FactionPicker').value;
+        //faction = document.getElementById('FactionPicker').value;
     }
     let factionName = decodeURI(faction);
     if(data[factionName]?.rules && !force)return console.log("Already have " + factionName + " in Cache.");
