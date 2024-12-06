@@ -35,7 +35,7 @@ body {
   .PageButton {
     width: 50px;
     height: 50px;
-    position: absolute;
+    position: fixed;
     top: calc(50% - 25px);
     left: calc(100% - 25px);
     background-color: blue;
@@ -60,6 +60,10 @@ body {
     background-color: yellow;
     position: sticky;
     top: 0;
+  }
+  #pageTitle {
+    position: fixed;
+    top: -10;
   }
 }
 @media only screen and (min-width: 600px) {
