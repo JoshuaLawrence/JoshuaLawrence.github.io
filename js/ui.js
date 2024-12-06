@@ -364,11 +364,15 @@ function gwParse(importListRaw){
             continue;
         }
         //Get Faction
-        if(parsedData["Factions"].includes(row.split("|")?.[1]?.trim().replace("Realm-lord","Realmlords"))){
-            importList["faction"] = row.split("|")[1].trim();
+        let j = 0;
+        if(parsedData["Factions"].includes(row.split("|")?.[j=0]?.trim().replace("Realm-lord","Realmlords"))){//AoS Android App v1.5.0
+            importList["faction"] = row.split("|")[j].trim();
             //Get Battle Formation
-            importList["battleFormation"] = row.split("|")[2].trim();
-
+            importList["battleFormation"] = row.split("|")[j+1].trim();
+        }else if(parsedData["Factions"].includes(row.split("|")?.[j=1]?.trim().replace("Realm-lord","Realmlords"))){ //AoS iOS App v1.6.0(18)
+            importList["faction"] = row.split("|")[j].trim();
+            //Get Battle Formation
+            importList["battleFormation"] = row.split("|")[j+1].trim();
         }
         //Get Spell Lore name
         if(row.includes("Spell Lore")){
