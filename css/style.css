@@ -66,6 +66,11 @@ body {
     position: fixed;
     top: -2vh;
   }
+  #optionsBtn {
+    display: block;
+    float: right;
+    margin: 10px;
+  }
 }
 @media only screen and (min-width: 600px) {
   #container{
@@ -73,6 +78,9 @@ body {
     gap: 10px;
   }
   .PageButton {
+    display: none;
+  }
+  #optionsBtn {
     display: none;
   }
 }
