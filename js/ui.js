@@ -227,13 +227,13 @@ function parseImportText(){
     document.getElementById("ListImport").value = "";
     //console.log("importListRaw",importListRaw);
     let importList = null;
-    if(importListRaw[0].split("-").length > 1){
+    /*if(importListRaw[0].split("-").length > 1){
         console.log(importListRaw)
         importList = nrParse(importListRaw);
-    }else{
+    }else{*/
         importList = gwParse(importListRaw);
         
-    }
+    //}
     return importList;
     
 }
