@@ -363,11 +363,10 @@ function gwParse(importListRaw){
             continue;
         }
         //Get Faction
-        if(parsedData["Factions"].includes(row.trim().replace("Realm-lord","Realmlords"))){
-            importList["faction"] = row;
+        if(parsedData["Factions"].includes(row.split("|")?.[1]?.trim().replace("Realm-lord","Realmlords"))){
+            importList["faction"] = row.split("|")[1].trim();
             //Get Battle Formation
-            row = importListRaw[++i];
-            importList["battleFormation"] = row;
+            importList["battleFormation"] = row.split("|")[2].trim();
 
         }
         //Get Spell Lore name
