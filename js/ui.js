@@ -350,9 +350,10 @@ function gwParse(importListRaw){
     };
     let RoRFinished = false;
 
-    let maxParseLength = importListRaw.length - 4
+    let maxParseLength = importListRaw.length - 3;
     for(let i = 0; i < maxParseLength; i++){
         let row = importListRaw[i];
+        if(row.includes("---")) continue;
         if(row.includes("<mark>")){
             row = row.replace("<mark>","");
             row = row.replace("</mark>","");
@@ -400,9 +401,10 @@ function gwParse(importListRaw){
             i++;
             RoRFound = true;
             //add to unit - do later
-            let regex = /[0-9]+/
+            let regex = /([(]+[0-9])\w+([0-9]+[)])/
             for(i;i<maxParseLength;i++){
                 row = importListRaw[i];
+                if(row.includes("---")) continue;
                 if(row.includes("Faction Terrain")){
                     RoRFinished = true;
                     break;
