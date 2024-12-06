@@ -10,7 +10,7 @@
 <body>
     <div id="header">
         <h1 id="pageTitle">AoS4 Turn Reminder</h1>
-        <button id="optionsBtn">Options</button>
+        <input type="button" id="optionsBtn" value="Options" onclick="toggleSidePanel()">
     </div>
     
     <div id="container">
@@ -42,7 +42,12 @@
 
             </div>
         </div>
+        <div id="sideContainer" class="pageContainer" style="display: none;">
+            <div id="sidePanel">
+
+            </div>
+        </div>
     </div>
     <div id="pageButton1" class="PageButton"></div>
-    <div id="pageButton2" class="PageButton"></div>
+    <!--<div id="pageButton2" class="PageButton"></div>-->
 </body>

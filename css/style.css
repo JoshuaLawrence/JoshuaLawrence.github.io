@@ -25,13 +25,13 @@ body {
   }
   #importDiv {
     background-color: red;
-    z-index: 0;
   }
   #unitContainer {
     background-color: green;
   }
   #phaseContainer {
     background-color: orange;
+    z-index: 0;
   }
   .PageButton {
     width: 50px;
@@ -70,6 +70,16 @@ body {
     display: block;
     float: right;
     margin: 10px;
+  }
+  #sideContainer {
+    z-index: 20;
+  }
+  #sidePanel {
+    background-color: purple;
+    height: 100%;
+    width: 40%;
+    right: 0;
+    position: absolute;
   }
 }
 @media only screen and (min-width: 600px) {

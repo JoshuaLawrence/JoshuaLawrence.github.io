@@ -15,12 +15,14 @@ const DEBUG = {
 
 };
 const PAGES = {
+    MIN_PAGE_TURN: 1,
+    MAX_PAGE_TURN: 2,
     IMPORT: 0,
     PHASES: 1,
     UNITS: 2,
     getPageID: (id)=>{
-        if(id < 0) id = 0;
-        if(id > 2) id = 2;
+        if(id < PAGES.MIN_PAGE_TURN) id = PAGES.MIN_PAGE_TURN;
+        if(id > PAGES.MAX_PAGE_TURN) id = PAGES.MAX_PAGE_TURN;
         return PAGES[id];
     },
     getPageName: (id)=>{
@@ -33,11 +35,10 @@ const PAGES = {
     2: "unitContainer",
     "0name": "List Import",
     "1name": "Phases",
-    "2name": "Units"
+    "2name": "Units",
 }
-var currentPage = 0;
-var lastPage = 0;
-var nextPage = 1;
+var currentPage = 1;
+var nextPage = currentPage+1;
 var pageStart = false;
 
 document.addEventListener("DOMContentLoaded", init);
@@ -81,9 +82,9 @@ function handlePageButtonTouchStart(event){
 
     var lastPage = document.getElementById(PAGES.getPageID(currentPage));
     
-    if(!pageStart){
+    if(!pageStart && currentPage < PAGES.MAX_PAGE_TURN){
         nextPage=currentPage+1;
-    }else{
+    }else if(currentPage > PAGES.MIN_PAGE_TURN){
         nextPage=currentPage-1;
     }
     var page = document.getElementById(PAGES.getPageID(nextPage));
@@ -153,6 +154,14 @@ function handlePageButtonTouchEnd(event){
         }
     }
     pageTitle.innerHTML = PAGES.getPageName(currentPage);
+}
+
+function toggleSidePanel(hide = false){
+    if(sideContainer.style.display != "none" || hide){
+        sideContainer.style.display = "none";
+    }else{
+        sideContainer.style.display = "unset";
+    }
 }
 
 function downloadDebugJson(){
