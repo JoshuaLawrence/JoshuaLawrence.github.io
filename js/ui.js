@@ -122,10 +122,8 @@ function handlePageButtonTouchMove(event){
     var page = document.getElementById(PAGES.getPageID(nextPage));
     if(!pageStart){
         //swiping from right
-        page.style.right = "unset";
         page.style.left = position;
     }else{
-        page.style.left = "unset";
         page.style.left = position - window.screen.width;
     }
     
@@ -138,9 +136,7 @@ function handlePageButtonTouchEnd(event){
     var page = document.getElementById(PAGES.getPageID(nextPage));
     
     page.style.left = "unset";
-    page.style.right = "unset";
     lastPage.style.left = "unset";
-    lastPage.style.right = "unset";
 
     if(lastXPosition && lastXPosition < window.screen.width/2){
         if(pageStart){//didn't swipe over halfway
