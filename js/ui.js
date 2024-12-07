@@ -83,7 +83,7 @@ function handlePageButtonTouchStart(event){
 
     let position = event.touches[0].clientX;
     pageStart = position < window.screen.width/2;
-    if((pageStart && position > 20)&&(pageStart && window.screen.width - position > 20))return
+    if((pageStart && position > 20)&&(!pageStart && window.screen.width - position > 20))return
     touchInProgress = true;
 
     var lastPage = document.getElementById(PAGES.getPageID(currentPage));
@@ -133,9 +133,6 @@ function handlePageButtonTouchMove(event){
 //snap the button to the left or the right of the screen
 function handlePageButtonTouchEnd(event){
     if(!touchInProgress)return;
-
-    event.target.style.zIndex = 100;
-  
     
     var lastPage = document.getElementById(PAGES.getPageID(currentPage,false));
     var page = document.getElementById(PAGES.getPageID(nextPage));
@@ -156,7 +153,7 @@ function handlePageButtonTouchEnd(event){
             lastPage.style.zIndex = -1;
             //console.log("next page")
         }
-    }else{
+    }else if(lastXPosition){
         if(!pageStart){//didn't swipe over halfway
             page.style.zIndex = -1;
             lastPage.style.zIndex = 10;
@@ -167,9 +164,13 @@ function handlePageButtonTouchEnd(event){
             lastPage.style.zIndex = -1;
             //console.log("last page")
         }
+    }else{
+        page.style.zIndex = -1;
+        lastPage.style.zIndex = 10;
     }
     pageTitle.innerHTML = PAGES.getPageName(currentPage);
     touchInProgress = false;
+    lastXPosition = null;
 }
 
 function showPage(pageID){
