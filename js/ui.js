@@ -45,7 +45,8 @@ const PAGES = {
 var currentPage = 1;
 var nextPage = currentPage+1;
 var pageStart = false;
-
+var touchInProgress = false;
+var lastXPosition = 0;
 document.addEventListener("DOMContentLoaded", init);
 
 async function init(){
@@ -69,31 +70,34 @@ async function init(){
         document.getElementById("debugBtn").style.display = "";
         error(...args)
     }
-    let pageButtons = document.getElementsByClassName("PageButton");
-    for(let i = 0; i < pageButtons.length; i++){
-        let pageButton = pageButtons[i];
-        pageButton.addEventListener("touchstart",handlePageButtonTouchStart);
-        pageButton.addEventListener("touchmove",handlePageButtonTouchMove);
-        pageButton.addEventListener("touchend",handlePageButtonTouchEnd);
-    }
+    
+    document.addEventListener("touchstart",handlePageButtonTouchStart);
+    document.addEventListener("touchmove",handlePageButtonTouchMove);
+    document.addEventListener("touchend",handlePageButtonTouchEnd);
+    
     pageTitle.innerHTML = PAGES.getPageName(currentPage);
 
 }
 //inits the page buttons and pages
 function handlePageButtonTouchStart(event){
-    //prevent page turning if current page is in a non-turnable range
-    if(!PAGES.isTurnable(currentPage))return;
 
-    event.target.style.zIndex = 110;
     let position = event.touches[0].clientX;
     pageStart = position < window.screen.width/2;
+    if((pageStart && position > 20)&&(pageStart && window.screen.width - position > 20))return
+    touchInProgress = true;
 
     var lastPage = document.getElementById(PAGES.getPageID(currentPage));
     
     if(!pageStart && currentPage < PAGES.MAX_PAGE_TURN){
         nextPage=currentPage+1;
-    }else if(currentPage > PAGES.MIN_PAGE_TURN){
+    }else if(pageStart && currentPage > PAGES.MIN_PAGE_TURN){
         nextPage=currentPage-1;
+    }else if(PAGES.isTurnable(currentPage)){ //allow swiping from any side when on a non-turnable page
+        return touchInProgress = false;
+    }
+    //return to Phases page if turning from a page in the non-scrollable range
+    if(!PAGES.isTurnable(currentPage)){
+        nextPage = 1;
     }
     var page = document.getElementById(PAGES.getPageID(nextPage));
     if(!pageStart){
@@ -107,43 +111,42 @@ function handlePageButtonTouchStart(event){
 }
 //moves the page button with the touch movement
 function handlePageButtonTouchMove(event){
-    //prevent page turning if current page is in a non-turnable range
-    if(!PAGES.isTurnable(currentPage))return;
+    if(!touchInProgress)return;
+    //return to Phases page if turning from a page in the non-scrollable range
+    if(!PAGES.isTurnable(currentPage)){
+        nextPage = 1;
+    }
     
-    let pageButton = event.target;
     let position = event.touches[0].clientX;
-    
-    if(position <= 25)position = 25;
-    if(position + 25 > window.screen.width)position = window.screen.width-25;
-    pageButton.style.left = position - 25;
+    lastXPosition = position;
     var page = document.getElementById(PAGES.getPageID(nextPage));
     if(!pageStart){
         //swiping from right
         page.style.right = "unset";
-        page.style.left = pageButton.getBoundingClientRect().right - 25;
+        page.style.left = position;
     }else{
         page.style.left = "unset";
-        page.style.left = pageButton.getBoundingClientRect().left + 25 -window.screen.width;
+        page.style.left = position - window.screen.width;
     }
+    
 }
 //snap the button to the left or the right of the screen
 function handlePageButtonTouchEnd(event){
-    //prevent page turning if current page is in a non-turnable range
-    if(!PAGES.isTurnable(currentPage))return;
+    if(!touchInProgress)return;
 
     event.target.style.zIndex = 100;
-    let pageButton = event.target;
-    let position = parseInt(pageButton.style.left);
-    var lastPage = document.getElementById(PAGES.getPageID(currentPage));
+  
+    
+    var lastPage = document.getElementById(PAGES.getPageID(currentPage,false));
     var page = document.getElementById(PAGES.getPageID(nextPage));
+    
     page.style.left = "unset";
     page.style.right = "unset";
     lastPage.style.left = "unset";
     lastPage.style.right = "unset";
 
-    if(position < window.screen.width/2){
-        pageButton.style.left = -25;
-        if(currentPage > nextPage){//didn't swipe over halfway
+    if(lastXPosition < window.screen.width/2){
+        if(pageStart){//didn't swipe over halfway
             page.style.zIndex = -1;
             lastPage.style.zIndex = 10;
             //console.log("last page - not past halfway")
@@ -154,8 +157,7 @@ function handlePageButtonTouchEnd(event){
             //console.log("next page")
         }
     }else{
-        pageButton.style.left = window.screen.width-25;
-        if(currentPage < nextPage){//didn't swipe over halfway
+        if(!pageStart){//didn't swipe over halfway
             page.style.zIndex = -1;
             lastPage.style.zIndex = 10;
             //console.log("last page - not past halfway")
@@ -167,6 +169,7 @@ function handlePageButtonTouchEnd(event){
         }
     }
     pageTitle.innerHTML = PAGES.getPageName(currentPage);
+    touchInProgress = false;
 }
 
 function showPage(pageID){
