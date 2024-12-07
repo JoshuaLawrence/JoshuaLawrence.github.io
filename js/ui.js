@@ -46,7 +46,7 @@ var currentPage = 1;
 var nextPage = currentPage+1;
 var pageStart = false;
 var touchInProgress = false;
-var lastXPosition = 0;
+var lastXPosition;
 document.addEventListener("DOMContentLoaded", init);
 
 async function init(){
@@ -145,7 +145,7 @@ function handlePageButtonTouchEnd(event){
     lastPage.style.left = "unset";
     lastPage.style.right = "unset";
 
-    if(lastXPosition < window.screen.width/2){
+    if(lastXPosition && lastXPosition < window.screen.width/2){
         if(pageStart){//didn't swipe over halfway
             page.style.zIndex = -1;
             lastPage.style.zIndex = 10;
@@ -254,6 +254,7 @@ async function importArmyList(){
     linkListData(newImportList);
     sortAbilitiesByPhase(newImportList);
     loadList();
+    showPage(PAGES.PHASES);
 }
 
 function parseImportText(){
