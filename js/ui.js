@@ -83,7 +83,7 @@ function handlePageButtonTouchStart(event){
 
     let position = event.touches[0].clientX;
     pageStart = position < window.screen.width/2;
-    if((pageStart && position > 20)&&(!pageStart && window.screen.width - position > 20))return
+    if((position > 20)&&(window.screen.width - position > 20))return
     touchInProgress = true;
 
     var lastPage = document.getElementById(PAGES.getPageID(currentPage));
