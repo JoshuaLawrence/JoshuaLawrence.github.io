@@ -174,13 +174,14 @@ function handlePageButtonTouchEnd(event){
 }
 
 function showPage(pageID){
-    
+    if(!MOBILE_VIEW)return;
     let lastPage = document.getElementById(PAGES.getPageID(currentPage,false));
     let nextPage = document.getElementById(PAGES.getPageID(pageID,false));
     if(!nextPage)return console.error("No page with ID " + pageID);
     currentPage = pageID;
     lastPage.style.zIndex = -1;
     nextPage.style.zIndex = 10;
+    pageTitle.innerHTML = PAGES.getPageName(currentPage);
 }
 
 function toggleSidePanel(hide = false){
