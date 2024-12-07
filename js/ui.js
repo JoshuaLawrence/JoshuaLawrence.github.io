@@ -6,6 +6,8 @@ var parsedData = {
     "Factions": [],
     "Lists": [],
 };
+var MOBILE_VIEW = window.screen.width < 600;
+window.onresize = () =>{MOBILE_VIEW = window.screen.width < 600}
 var PROFILE = {};
 //IndexedDB link
 var db;
@@ -20,15 +22,18 @@ const PAGES = {
     IMPORT: 0,
     PHASES: 1,
     UNITS: 2,
-    getPageID: (id)=>{
-        if(id < PAGES.MIN_PAGE_TURN) id = PAGES.MIN_PAGE_TURN;
-        if(id > PAGES.MAX_PAGE_TURN) id = PAGES.MAX_PAGE_TURN;
+    getPageID: (id,pageTurn=true)=>{
+        if(pageTurn && id < PAGES.MIN_PAGE_TURN) id = PAGES.MIN_PAGE_TURN;
+        if(pageTurn && id > PAGES.MAX_PAGE_TURN) id = PAGES.MAX_PAGE_TURN;
         return PAGES[id];
     },
     getPageName: (id)=>{
         if(id < 0) id = 0;
         if(id > 2) id = 2;
         return PAGES[id+"name"];
+    },
+    isTurnable: (id)=>{
+        return id >= PAGES.MIN_PAGE_TURN && id <= PAGES.MAX_PAGE_TURN;
     },
     0: "importDiv",
     1: "phaseContainer",
@@ -76,6 +81,9 @@ async function init(){
 }
 //inits the page buttons and pages
 function handlePageButtonTouchStart(event){
+    //prevent page turning if current page is in a non-turnable range
+    if(!PAGES.isTurnable(currentPage))return;
+
     event.target.style.zIndex = 110;
     let position = event.touches[0].clientX;
     pageStart = position < window.screen.width/2;
@@ -99,10 +107,12 @@ function handlePageButtonTouchStart(event){
 }
 //moves the page button with the touch movement
 function handlePageButtonTouchMove(event){
+    //prevent page turning if current page is in a non-turnable range
+    if(!PAGES.isTurnable(currentPage))return;
+    
     let pageButton = event.target;
     let position = event.touches[0].clientX;
     
-
     if(position <= 25)position = 25;
     if(position + 25 > window.screen.width)position = window.screen.width-25;
     pageButton.style.left = position - 25;
@@ -118,6 +128,9 @@ function handlePageButtonTouchMove(event){
 }
 //snap the button to the left or the right of the screen
 function handlePageButtonTouchEnd(event){
+    //prevent page turning if current page is in a non-turnable range
+    if(!PAGES.isTurnable(currentPage))return;
+
     event.target.style.zIndex = 100;
     let pageButton = event.target;
     let position = parseInt(pageButton.style.left);
@@ -154,6 +167,16 @@ function handlePageButtonTouchEnd(event){
         }
     }
     pageTitle.innerHTML = PAGES.getPageName(currentPage);
+}
+
+function showPage(pageID){
+    
+    let lastPage = document.getElementById(PAGES.getPageID(currentPage,false));
+    let nextPage = document.getElementById(PAGES.getPageID(pageID,false));
+    if(!nextPage)return console.error("No page with ID " + pageID);
+    currentPage = pageID;
+    lastPage.style.zIndex = -1;
+    nextPage.style.zIndex = 10;
 }
 
 function toggleSidePanel(hide = false){
