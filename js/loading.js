@@ -256,10 +256,18 @@ async function loadFaction(faction = null, force=false){
    
 }
 
-
+function fixIllegalXMLCharacters(string){
+    string = string.replaceAll('\u001b','ff');
+    string = string.replaceAll('\u001e','Th');
+    string = string.replaceAll('\u001a','fl');
+    return string;
+}
 
 function parseXml(string){
+    //filter out/fix illegal characters
+    string = fixIllegalXMLCharacters(string);
+
     const parser = new DOMParser();
     const doc = parser.parseFromString(string,"application/xml");
     return doc;
-}
+}       
