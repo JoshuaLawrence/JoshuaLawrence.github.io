@@ -439,7 +439,7 @@ function gwParse(importListRaw){
             i++;
             RoRFound = true;
             //add to unit - do later
-            let regex = /([(]+[0-9])\w+([0-9]+[)])/
+            let regex = /\(\d\d\d\)/
             for(i;i<maxParseLength;i++){
                 row = importListRaw[i];
                 if(row.includes("---")) continue;
@@ -458,13 +458,12 @@ function gwParse(importListRaw){
                 
             }
         }
-        
         if(row.includes('Faction Terrain')){
             i++;
             //faction terrain
             for(i;i<maxParseLength;i++){
                 row = importListRaw[i];
-                if(row.trim() == "") continue;
+                if(row.trim() == "") break;
                 importList["units"].push({unitName:row,abilities:[]});
             }
         }
