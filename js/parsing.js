@@ -140,6 +140,7 @@ function linkListData(list){
         list.regimentsOfRenown.forEach((RoR,RoR_idx)=>{
             //get RoR ability
             let RoRName = RoR.name;
+            RoRName = RoRName.replace("Saviours","Saviors");//convert correct spelling to american to match the BSData
             let dataRow = data.RoR.querySelector('selectionEntry[name="Regiment of Renown: '+ RoRName + '"]');
             parseProfiles(list,dataRow);
             //find units in RoR and add abilities to list
