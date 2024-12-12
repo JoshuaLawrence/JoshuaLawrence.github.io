@@ -66,8 +66,9 @@ body {
   }
   #optionsBtn {
     display: block;
-    float: right;
+    right: 0;
     margin: 10px;
+    position: fixed;
   }
   #sideContainer {
     z-index: 20;
@@ -94,6 +95,9 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
+  }
+  #header {
+    position: fixed;
   }
   
 }
