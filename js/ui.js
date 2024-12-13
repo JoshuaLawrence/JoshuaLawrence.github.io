@@ -623,6 +623,14 @@ function createAbilityDiv(ability,showWeapon = false){
     if(unitAbilities.includes(ability.typeName)){
         if(!showWeapon)return;
         abilityDiv.classList.add("weaponProfileDiv");
+        switch(ability.typeName){
+            case "Melee Weapon":
+                abilityDiv.classList.add("meleeProfile");
+                break;
+            case "Ranged Weapon":
+                abilityDiv.classList.add("rangedProfile");
+                break;
+        }
     }else{
         abilityDiv.classList.add("abilityDiv");
     }
