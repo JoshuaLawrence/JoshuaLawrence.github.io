@@ -675,6 +675,11 @@ function createAbilityDiv(ability,showWeapon = false){
 
 function createAbilityCharDiv(char,val){
     let div = document.createElement("div")
+    if(val == ""){ 
+        //don't sho a characteristic if it has no values
+        div.style.display = "none";
+        return div;
+    }
     let span = document.createElement("span");
     let label = document.createElement("label");
     label.innerHTML = char;
