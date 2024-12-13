@@ -751,8 +751,11 @@ function createUnitDiv(list,unit){
 
     let containerDiv = document.createElement("div");
     unitDiv.appendChild(containerDiv);
-    
-    unit.abilities.forEach((ability) =>{
+    //sort unit abilities Ranged > Melee > Passive
+   
+    let _abilities = unit.abilities.sort(sortUnitAbilities);
+
+    _abilities.forEach((ability) =>{
         if(['Melee Weapon','Ranged Weapon', 'Ability (Passive)'].includes(ability.typeName)){
             let _ability = list.abilities[ability.id];
             let div = createAbilityDiv(_ability,true);
@@ -763,4 +766,22 @@ function createUnitDiv(list,unit){
 
 
     return unitDiv;
+}
+
+function sortUnitAbilities(a,b){
+    if(!a.typeName)return -1;
+    if(!b.typeName)return 1;
+    if(a.typeName.includes("Ability") && ['Melee Weapon','Ranged Weapon'].includes(b.typeName)){
+        return 1;
+    }
+    if(b.typeName.includes("Ability") && ['Melee Weapon','Ranged Weapon'].includes(a.typeName)){
+        return -1;
+    }
+
+    if(a.typeName.includes("Ranged") && (b.typeName.includes("Melee") || b.typeName.includes("Ability"))){
+        return -1;
+    }
+    if(b.typeName.includes("Ranged") && (a.typeName.includes("Melee") || a.typeName.includes("Ability"))){
+        return 1;
+    }
 }
