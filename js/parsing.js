@@ -197,7 +197,8 @@ function parseProfiles(list,xmlData,unit_idx = null,unit = null,wargear = false)
         }
         let name = profile.attributes.name.value;
         let id = profile.attributes.id.value;
-       
+        let typeName = profile.attributes.typeName.value;
+        
         if(!list.abilities[id]){
            
             list.abilities[id] = parseAbility(profile);
@@ -206,7 +207,7 @@ function parseProfiles(list,xmlData,unit_idx = null,unit = null,wargear = false)
             list.abilities[id].units.push(unit_idx);
         }
         if(unit !== null)
-            unit.abilities.push({id,name});
+            unit.abilities.push({id,name,typeName});
     })
 }
 
