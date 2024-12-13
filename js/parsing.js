@@ -177,7 +177,7 @@ function parseUnitCharacteristics(list,_data,unit_idx){
 
     if(typeof(unit_idx) == "string" && unit_idx?.slice(0,1) == 'r'){
         let ror_idx = unit_idx.slice(1).split('_')[0];
-        unit = list.regimentsOfRenown[ror_idx].characteristics = {move,health,control,save};
+        unit = list.regimentsOfRenown[ror_idx].units[unit_idx.split('_')[1]].characteristics = {move,health,control,save};
     }else{
         list.units[unit_idx].characteristics = {move,health,control,save};
     }
