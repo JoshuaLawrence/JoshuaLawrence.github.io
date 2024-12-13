@@ -770,8 +770,11 @@ function createUnitDiv(list,unit){
 
     let unitTitle = document.createElement("h1");
     unitTitle.innerHTML = unit.unitName;
-    header.appendChild(unitTitle);
-    
+
+    let charDiv = createUnitCharDiv(unit);
+
+    header.appendChild(charDiv);    
+    header.appendChild(unitTitle);    
     unitDiv.appendChild(header);
 
     let containerDiv = document.createElement("div");
@@ -792,6 +795,27 @@ function createUnitDiv(list,unit){
 
     return unitDiv;
 }
+
+function createUnitCharDiv(unit){
+    let charDiv = document.createElement("div");
+    charDiv.classList.add("unitCharacteristics");
+    let moveDiv = document.createElement("div");
+    let healthDiv = document.createElement("div");
+    let saveDiv = document.createElement("div");
+    let controlDiv = document.createElement("div");
+    
+    charDiv.appendChild(moveDiv);
+    charDiv.appendChild(saveDiv);
+    charDiv.appendChild(healthDiv);
+    charDiv.appendChild(controlDiv);
+    moveDiv.innerHTML = unit.characteristics.move + " Move";
+    healthDiv.innerHTML = unit.characteristics.health + " Health";
+    saveDiv.innerHTML = unit.characteristics.save + " Save";
+    controlDiv.innerHTML = unit.characteristics.control + " Control";
+
+    return charDiv;
+}
+
 
 function sortUnitAbilities(a,b){
     if(!a.typeName)return -1;

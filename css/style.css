@@ -61,6 +61,11 @@ body {
     position: sticky;
     top: 0;
   }
+  .unitTitleDiv{
+    align-items: center;
+    display: grid;
+    grid-template-columns: 100px auto;
+  }
   #pageTitle {
     position: fixed;
     top: -2vh;
@@ -168,4 +173,31 @@ a {
 
 .meleeProfile > div:nth-child(2) {
   margin-left: 66px;
+}
+
+.unitCharacteristics {
+  border: solid 1px black;
+  border-radius: 100%;
+  background-color: #9d8500;
+  width: 80px;
+  height: 80px;
+  display: grid;
+  grid-template-columns: repeat(2, 0.4fr);
+  grid-template-rows: repeat(2, 0.4fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  transform: rotate(45deg);
+  margin: 5px;
+}
+.unitCharacteristics > div {
+  color: white;
+  width: 34px;
+  height: 34px;
+  text-align: center;
+  transform: rotate(-45deg);
+  align-self: center;
+  position: relative;
+  right: -10px;
+  top: 8px;
+  line-height: .8;
 }
