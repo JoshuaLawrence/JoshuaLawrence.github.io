@@ -249,7 +249,7 @@ function sortAbilitiesByPhase(list){
         deployment:[],
         start_of_battle_round:[],
         your:{
-            Hero:{Passive:[],Abilities:[],Reactions:[]},
+            Hero:{Passive:[],Abilities:[],Reactions:[],Spells:[]},
             Movement:{Passive:[],Abilities:[],Reactions:[]},
             Shooting:{Passive:[],Abilities:[],Weapons:[],Reactions:[]},
             Charge:{Passive:[],Abilities:[],Reactions:[]},
@@ -258,7 +258,7 @@ function sortAbilitiesByPhase(list){
             other:{Passive:[],Abilities:[],Reactions:[]},
         },
         enemy:{
-            Hero:{Passive:[],Abilities:[],Reactions:[]},
+            Hero:{Passive:[],Abilities:[],Reactions:[],Spells:[]},
             Movement:{Passive:[],Abilities:[],Reactions:[]},
             Shooting:{Passive:[],Abilities:[],Weapons:[],Reactions:[]},
             Charge:{Passive:[],Abilities:[],Reactions:[]},
@@ -344,6 +344,10 @@ function sortAbilitiesByPhase(list){
             phase = "EndOfTurn";
         }else if(ability.chars?.Timing?.includes("Hero")){
             phase = "Hero";
+            if(ability.typeName.includes("Spell")){
+                phases.your[phase].Spells.push(ability);
+                //return; // enable the return after adding tabs per phase
+            }
         }else if(ability.chars?.Timing?.includes("Movement")){
             phase = "Movement";
         }else if(ability.chars?.Timing?.includes("Shooting")){
