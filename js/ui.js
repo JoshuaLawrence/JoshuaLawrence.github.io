@@ -383,6 +383,7 @@ function gwParse(importListRaw){
         "rawInput": importListRaw
     };
     let RoRFinished = false;
+    let unitNames = []; //for tracking unit names - only allow 1 of a unit
 
     let maxParseLength = importListRaw.length - 3;
     for(let i = 0; i < maxParseLength; i++){
@@ -426,7 +427,11 @@ function gwParse(importListRaw){
         //Get Unit name
         if(row.includes("(")){
             let unitName = row.split("(")[0].trim();
-            importList["units"].push({unitName,abilities:[]});
+            if(!unitNames.includes(unitName)){ //only allow 1 of each unit
+                unitNames.push(unitName);
+                importList["units"].push({unitName,abilities:[]});
+            }
+            
         }
         //Get Unit Enhancements
         if(row.includes('•')){
@@ -472,7 +477,6 @@ function gwParse(importListRaw){
     //store the list(s) in local storage
     updateListStorage(importList);
     //console.log("importList",importList);
-
     return importList;
 }
 
