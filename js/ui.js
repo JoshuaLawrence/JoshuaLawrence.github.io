@@ -739,7 +739,7 @@ function updateListStorage(listUpdate = null){
 
 function displayUnits(list){
     let unitView = document.getElementById("unitView");
-
+    unitView.innerHTML = "";
     list.units.forEach((unit)=>{
         let unitDiv = createUnitDiv(list,unit);
         unitView.appendChild(unitDiv);
