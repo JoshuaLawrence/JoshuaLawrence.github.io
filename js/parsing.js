@@ -306,6 +306,11 @@ function sortAbilitiesByPhase(list){
                 phases.enemy.Combat.Reactions.push(ability);
                 addedToPhase = true;
             }
+            if(ability.chars.Timing.includes("Fight")){
+                phases.your.Combat.Reactions.push(ability);
+                phases.enemy.Combat.Reactions.push(ability);
+                addedToPhase = true;
+            }
             if(ability.chars.Timing.includes("Charge")){
                 phases.your.Charge.Reactions.push(ability);
                 phases.enemy.Charge.Reactions.push(ability);
