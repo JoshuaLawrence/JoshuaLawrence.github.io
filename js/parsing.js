@@ -117,13 +117,14 @@ function linkListData(list){
                 if(profile){
                     let name = profile.attributes.name.value;
                     let id = profile.attributes.id.value;
+                    let typeName = profile.attributes.typeName.value; //for showing up in Units page
                     if(!list.abilities[id]){
                 
                         list.abilities[id] = parseAbility(profile);
                         //console.log(list.abilities[id])
                     }
                     list.abilities[id].units.push(unit_idx);
-                    unit.abilities.push({id,name});
+                    unit.abilities.push({id,name,typeName});
                 }else{
                     //check for wargear options
                     let wargearData = _data.units.querySelector('[name="'+enhancement+'"]');
