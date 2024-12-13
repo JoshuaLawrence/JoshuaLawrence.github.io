@@ -511,6 +511,8 @@ function loadList(listIdx = null){
     displayParseErrors(selectedList);
 
     displayAbilities(selectedList);
+
+    displayUnits(selectedList);
    
 }
 
@@ -609,16 +611,16 @@ function createPhaseDiv(phase,abilities){
     return phaseDiv;
 }
 
-function createAbilityDiv(ability){
+function createAbilityDiv(ability,showWeapon = false){
     let abilityDiv = document.createElement("div");
     let abTitle = document.createElement("span");
     abTitle.innerHTML = ability.name + " - " + ability.typeName;
     abilityDiv.appendChild(abTitle);
     let containerDiv = document.createElement("div");
     abilityDiv.appendChild(containerDiv);
+    let unitAbilities = ['Melee Weapon','Ranged Weapon'];
 
-    let showWeapon = document.getElementById("showWeaponChk").checked;
-    if(['Melee Weapon','Ranged Weapon'].includes(ability.typeName)){
+    if(unitAbilities.includes(ability.typeName)){
         if(!showWeapon)return;
         abilityDiv.classList.add("weaponProfileDiv");
     }else{
@@ -627,8 +629,17 @@ function createAbilityDiv(ability){
 
     Object.entries(ability.chars).forEach(([key,value])=>{
         let div = createAbilityCharDiv(key,value);
-        containerDiv.appendChild(div);
+        //display weapon profiles with the weapon abilities beneath the characteristics
+        if(key == "Ability"){
+            abilityDiv.appendChild(div);
+        }else{
+            containerDiv.appendChild(div);
+        }
+        
     });
+    //dont bother with the Unit name as it'll be under the unit on the Units page
+    if(showWeapon)return abilityDiv;
+
     let unitsDiv = document.createElement("div");
     let unTitle = document.createElement("label");
     unTitle.innerHTML = "Units";
@@ -677,7 +688,9 @@ function createAbilityCharDiv(char,val){
     }
     
     span.innerHTML=val;
-    div.appendChild(label);
+    //dont append the Ability label to weapon profiles
+    if(char!="Ability")
+        div.appendChild(label);
     div.appendChild(span);
     return div;
 }
@@ -716,3 +729,38 @@ function updateListStorage(listUpdate = null){
     localStorage.setItem("Lists",JSON.stringify(parsedData['Lists']));
 }
 
+function displayUnits(list){
+    let unitView = document.getElementById("unitView");
+
+    list.units.forEach((unit)=>{
+        let unitDiv = createUnitDiv(list,unit);
+        unitView.appendChild(unitDiv);
+    })
+}
+
+function createUnitDiv(list,unit){
+    let unitDiv = document.createElement("div");
+    let header = document.createElement("div");
+    header.classList.add("unitTitleDiv");
+
+    let unitTitle = document.createElement("h1");
+    unitTitle.innerHTML = unit.unitName;
+    header.appendChild(unitTitle);
+    
+    unitDiv.appendChild(header);
+
+    let containerDiv = document.createElement("div");
+    unitDiv.appendChild(containerDiv);
+    
+    unit.abilities.forEach((ability) =>{
+        if(['Melee Weapon','Ranged Weapon', 'Ability (Passive)'].includes(ability.typeName)){
+            let _ability = list.abilities[ability.id];
+            let div = createAbilityDiv(_ability,true);
+            containerDiv.appendChild(div);
+        }
+    });
+
+
+
+    return unitDiv;
+}
