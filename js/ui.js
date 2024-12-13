@@ -429,7 +429,11 @@ function gwParse(importListRaw){
             let unitName = row.split("(")[0].trim();
             if(!unitNames.includes(unitName)){ //only allow 1 of each unit
                 unitNames.push(unitName);
-                importList["units"].push({unitName,abilities:[]});
+                importList["units"].push({
+                    unitName,
+                    abilities:[],
+                    characteristics:{}
+                });
             }
             
         }

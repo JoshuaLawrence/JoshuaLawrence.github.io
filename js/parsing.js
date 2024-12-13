@@ -134,6 +134,7 @@ function linkListData(list){
                 }
             })
         }
+        parseUnitCharacteristics(list,_unit,unit_idx);
         //console.log(unit.unitName,_data.units.querySelector('[name="'+unit.unitName+'"]'))
     });
     //console.log(list);
@@ -158,12 +159,29 @@ function linkListData(list){
                 })
                 if(!ror_data) return console.log("could not find RoR unit " + unit.unitName);
                 let _unit = ror_data.units.querySelector('[type="unit"][name="'+unit.unitName+'" i]');
-                parseProfiles(list,_unit,'r'+RoR_idx+'_'+unit_idx,unit)
+                parseProfiles(list,_unit,'r'+RoR_idx+'_'+unit_idx,unit);
+                parseUnitCharacteristics(list,_unit,'r'+RoR_idx+'_'+unit_idx);
+                
             });
 
         })
     }
    
+}
+
+function parseUnitCharacteristics(list,_data,unit_idx){
+    let move = _data.querySelector('characteristic[name="Move"]')?.innerHTML ?? '-';
+    let health = _data.querySelector('characteristic[name="Health"]')?.innerHTML;
+    let control = _data.querySelector('characteristic[name="Control"]')?.innerHTML ?? '-';
+    let save = _data.querySelector('characteristic[name="Save"]')?.innerHTML;
+
+    if(typeof(unit_idx) == "string" && unit_idx?.slice(0,1) == 'r'){
+        let ror_idx = unit_idx.slice(1).split('_')[0];
+        unit = list.regimentsOfRenown[ror_idx].characteristics = {move,health,control,save};
+    }else{
+        list.units[unit_idx].characteristics = {move,health,control,save};
+    }
+    
 }
 
 function logParseError(parseType,parseName,list){
