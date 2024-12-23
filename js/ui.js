@@ -75,7 +75,10 @@ async function init(){
     document.addEventListener("touchmove",handlePageButtonTouchMove);
     document.addEventListener("touchend",handlePageButtonTouchEnd);
     phaseBorder.addEventListener("scroll",handlePageScroll);
-    phaseBorder.lastElementChild.previousElementSibling.addEventListener("touchmove",handleScrollBtn);
+    phaseScroll.addEventListener("touchmove",handleScrollBtn);
+    unitBorder.addEventListener("scroll",handlePageScroll);
+    unitScroll.addEventListener("touchmove",handleScrollBtn);
+
     pageTitle.innerHTML = PAGES.getPageName(currentPage);
 
 }
