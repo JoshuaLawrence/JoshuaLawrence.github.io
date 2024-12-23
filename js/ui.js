@@ -233,6 +233,9 @@ function collapsePhaseDiv(el,collapse = true){
     }else{
         el.nextElementSibling.style.display = "none";
         el.children[0].value = "▲";
+        //keeps phase header on screen when collapsing a phase
+        if(el.getBoundingClientRect().y < 0)
+            el.scrollIntoView();
     }
 }
 
