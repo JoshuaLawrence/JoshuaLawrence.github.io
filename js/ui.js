@@ -188,6 +188,16 @@ function toggleSidePanel(hide = false){
     }
 }
 
+function collapsePhaseDiv(el,collapse = true){
+    if(el.nextElementSibling.style.display == "none"){
+        el.nextElementSibling.style.display = "";
+        el.children[0].value = "▼";
+    }else{
+        el.nextElementSibling.style.display = "none";
+        el.children[0].value = "▲";
+    }
+}
+
 function downloadDebugJson(){
 
     let link = document.createElement('a');
@@ -563,6 +573,12 @@ function createPhaseDiv(phase,abilities){
     phaseDiv.appendChild(body);
 
     header.classList.add("phaseTitleDiv");
+    let collapseBtn = document.createElement("input");
+    collapseBtn.type = "button";
+    collapseBtn.onclick =  () => collapsePhaseDiv(header);
+    collapseBtn.classList.add("collapseBtn");
+    collapseBtn.value = "▼"
+    
 
     let title = document.createElement("h1");
     
@@ -584,7 +600,7 @@ function createPhaseDiv(phase,abilities){
         });
         
     }else {//if(phase != "other"){ display abilities with missing timings in own div at end
-
+        header.appendChild(collapseBtn);
         header.appendChild(title); 
         let _abilities = abilities;
         if(abilities?.Abilities != undefined){
