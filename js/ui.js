@@ -74,12 +74,44 @@ async function init(){
     document.addEventListener("touchstart",handlePageButtonTouchStart);
     document.addEventListener("touchmove",handlePageButtonTouchMove);
     document.addEventListener("touchend",handlePageButtonTouchEnd);
-    
+    phaseBorder.addEventListener("scroll",handlePageScroll);
+    phaseBorder.lastElementChild.previousElementSibling.addEventListener("touchmove",handleScrollBtn);
     pageTitle.innerHTML = PAGES.getPageName(currentPage);
 
 }
+
+function handleScrollBtn(event){
+    console.log(event)
+    event.preventDefault();
+
+    let card = event.target.parentElement;
+    let pageDiv = card.lastElementChild;
+    let cardRect = card.getBoundingClientRect()
+    let pageRect = pageDiv.getBoundingClientRect();
+    let pageHeight = pageRect.height;
+
+    //clamp the percentage so the button and scroll position matches the touch
+    let percent = (event.touches[0].pageY - cardRect.top*1.5)/(cardRect.bottom * 0.9);
+    let scrollTo = (pageHeight)*(percent);
+
+    card.scrollTo(0,scrollTo);
+}
+
+function handlePageScroll(event){
+    let scrollBtn = event.target.lastElementChild.previousElementSibling;
+    let rect = event.target.lastElementChild.getBoundingClientRect();
+    let pageBot = rect.bottom;
+    let pageHeight = rect.height;
+    scrollBtn.style.top = 92-((pageBot)/pageHeight)*85 +"%" ;
+
+
+}
+
 //inits the page buttons and pages
 function handlePageButtonTouchStart(event){
+    //prevent page turning while fast scrolling
+    //console.log(event)
+    if(event.target.classList.contains("scrollBtn"))return;
 
     let position = event.touches[0].clientX;
     pageStart = position < window.screen.width/2;

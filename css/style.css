@@ -121,6 +121,20 @@ body {
     height: 10vw;
     width: 10vw;
   }
+  .scrollBtn {
+    background-color: black;
+    width: 10vw;
+    height: 10vw;
+    z-index: 30;
+    position: fixed;
+    right: 5px;
+    top: 6.6%;
+    border-radius: 5vw; 
+    opacity: 20%;
+  }
+  .scrollBtn:hover {
+    opacity: 100%;
+  }
   
 }
 @media only screen and (min-width: 600px) {

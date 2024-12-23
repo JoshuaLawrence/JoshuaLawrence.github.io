@@ -27,7 +27,7 @@
             </div>
         </div>
         <div id="phaseContainer" class="pageContainer">
-            <div class="pageBorder">
+            <div id="phaseBorder" class="pageBorder">
                 <select id="listSel" style="width:150px;" onchange="loadList(this.value);">
                 </select>
                 <input type="button" value="X" onclick="removeSelectedList();" title="Delete selected list"/>
@@ -36,8 +36,11 @@
                 <br>
                 <div id="listView">
                 </div>
+                <div id="scrollBtn" class="scrollBtn">
+                </div>
                 <div id="phaseView">
                 </div>
+                
             </div>
         </div>
         <div id="unitContainer" class="pageContainer">
