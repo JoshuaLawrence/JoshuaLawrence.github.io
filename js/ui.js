@@ -84,7 +84,7 @@ async function init(){
 }
 
 function handleScrollBtn(event){
-    console.log(event)
+
     event.preventDefault();
 
     let card = event.target.parentElement;
@@ -94,18 +94,21 @@ function handleScrollBtn(event){
     let pageHeight = pageRect.height;
 
     //clamp the percentage so the button and scroll position matches the touch
-    let percent = (event.touches[0].pageY - cardRect.top*1.5)/(cardRect.bottom * 0.9);
-    let scrollTo = (pageHeight)*(percent);
+    let percent = (event.touches[0].pageY - cardRect.top)/(cardRect.height );
+    let scrollTo = (pageHeight+cardRect.top)*(percent);
 
     card.scrollTo(0,scrollTo);
 }
 
 function handlePageScroll(event){
     let scrollBtn = event.target.lastElementChild.previousElementSibling;
-    let rect = event.target.lastElementChild.getBoundingClientRect();
-    let pageBot = rect.bottom;
-    let pageHeight = rect.height;
-    scrollBtn.style.top = 92-((pageBot)/pageHeight)*85 +"%" ;
+    let card = event.target.parentElement;
+    let cardRect = card.getBoundingClientRect()
+    let pageRect = event.target.lastElementChild.getBoundingClientRect();
+    let pageBot = pageRect.top;
+    let pageHeight = pageRect.height;
+
+    scrollBtn.style.top = cardRect.top - ((pageBot)/(pageHeight-50))*(cardRect.height-50);
 
 
 }
