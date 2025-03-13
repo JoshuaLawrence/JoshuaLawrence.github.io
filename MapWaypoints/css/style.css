@@ -24,7 +24,7 @@ body {
   background-color: white;
   justify-content: center;
   align-items: center;
-  border: 3px solid black;
+  border: 1.2vw solid black;
 }
 #alertMsg {
   min-height:10vh;
