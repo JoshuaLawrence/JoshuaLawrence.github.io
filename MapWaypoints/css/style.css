@@ -3,3 +3,22 @@ body {
 }
 
 #map { height: 100%; }
+#alertContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#alertBody {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+#alertButtons {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+.alertBtn {
+  position: relative;
+  width: 10em;
+}
