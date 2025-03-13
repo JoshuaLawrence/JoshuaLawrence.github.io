@@ -12,7 +12,14 @@ window.onload = function() {
     }).addTo(map);
 }
 
+let alertQueue = [];
 function createAlert(msg,acceptText = null,rejectText = null,acceptCallback = null, rejectCallback = null){
+    //add to alert queue if alert box is already open
+    if(alertContainer.style.display != "none"){
+        alertQueue.push([msg,acceptText,rejectText,acceptCallback,rejectCallback]);
+        return;
+    }
+
     //set the alert message
     alertMsg.innerText = msg;
 
@@ -68,4 +75,12 @@ function closeAlert(){
     alertAccept.innerHtml = "";
     alertReject.innerHtml = "";
     alertReject.style.display = "none";
+    //show the next queued alert
+    if(alertQueue.length > 0){
+        let alertParams = alertQueue.unshift();
+        setTimeout(()=>{
+            createAlert(...alertParams);
+        },500)
+        
+    }
 }
