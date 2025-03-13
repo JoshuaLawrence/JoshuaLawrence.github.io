@@ -1,7 +1,9 @@
 var map = null;
-registerServiceWorker();
+
 window.onload = async function() {
     
+    await registerServiceWorker();
+
     //check online status and set event listeners
     if(navigator.onLine){
         internetActiveIndicator.innerText = "Online";
