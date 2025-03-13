@@ -18,43 +18,43 @@ function createAlert(msg,acceptText = null,rejectText = null,acceptCallback = nu
 
     //set accept text - default to Ok
     if(acceptText != null){
-        alertAccept.innerHtml = acceptText;
+        alertAccept.innerText = acceptText;
     }else{
-        alertAccept.innerHtml = "Ok";
+        alertAccept.innerText = "Ok";
     }
 
     //set accept callback
     if(acceptCallback != null){
-        alertAccept.addEventListener("click",()=>{
+        alertAccept.onclick = () => {
             acceptCallback();
             closeAlert();
-        });
+        };
     }else{
-        alertAccept.addEventListener("click",()=>{
+        alertAccept.onclick = () => {
             closeAlert();
-        });
+        };
     }
 
     //reject button - not neccessarily always visible
     if(rejectCallback != null || rejectText != null){
         //set the reject button text
         if(rejectText != null){
-            alertReject.innerHtml = rejectText;
+            alertReject.innerText = rejectText;
         }else{
-            alertReject.innerHtml = "Cancel";
+            alertReject.innerText = "Cancel";
         }
         //show the reject button
         alertReject.style.display = "";
         //set the reject button callback
         if(rejectCallback != null){
-            alertReject.addEventListener("click",()=>{
+            alertReject.onclick = () => {
                 rejectCallback();
                 closeAlert();
-            });
+            };
         }else{
-            alertReject.addEventListener("click",()=>{
+            alertReject.onclick = () => {
                 closeAlert();
-            });
+            };
         }
     }
 
@@ -63,8 +63,8 @@ function createAlert(msg,acceptText = null,rejectText = null,acceptCallback = nu
 }
 function closeAlert(){
     alertContainer.style.display = "none";
-    alertAccept.removeEventListener("click");
-    alertReject.removeEventListener("click");
+    alertAccept.onclick = "";
+    alertReject.onclick = "";
     alertAccept.innerHtml = "";
     alertReject.innerHtml = "";
     alertReject.style.display = "none";

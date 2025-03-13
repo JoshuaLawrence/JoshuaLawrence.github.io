@@ -4,21 +4,41 @@ body {
 
 #map { height: 100%; }
 #alertContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  z-index: 1000;
+  background-color: #808080c9;
 }
 #alertBody {
   width: 200px;
+  min-height: 100px;
   display: flex;
   flex-direction: column;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid black;
+}
+#alertMsg {
+  min-height: 50px;
 }
 #alertButtons {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   position: relative;
+  width: 100%;
+  
 }
 .alertBtn {
   position: relative;
-  width: 10em;
+  width: 40%;
 }
