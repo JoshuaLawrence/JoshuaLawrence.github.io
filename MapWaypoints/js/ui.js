@@ -19,7 +19,7 @@ window.onload = async function() {
 const registerServiceWorker = async () => {
     if ("serviceWorker" in navigator) {
         try {
-            const registration = await navigator.serviceWorker.register("/js/sw.js", {
+            const registration = await navigator.serviceWorker.register("/MapWaypoints/js/sw.js", {
                 scope: "/MapWaypoints/",
             });
             if (registration.installing) {
