@@ -1,61 +1,13 @@
 <head>
-    <link rel='stylesheet' href='css/style.css?v=3'>
-    <script src='data/coreAbilities.js?v=3'></script>
-    <script src='js/loading.js?v=3'></script>
-    <script src='js/parsing.js?v=3'></script>
-    <script src='js/ui.js?v=4'></script>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport" />
-    <link rel="icon" type="image/png" href="/icons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
-    <link rel="shortcut icon" href="/icons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="AoSReminder" />
-    <link rel="manifest" href="/site.webmanifest" />
+   
 </head>
 <body>
     <div id="header">
-        <h1 id="pageTitle">AoS4 Turn Reminder</h1>
-        <input type="button" id="optionsBtn" value="Options" onclick="toggleSidePanel()">
+        <h1 id="pageTitle">Joshua Lawrence Web Apps</h1>
+       
     </div>
     
     <div id="container">
-        <div id="importDiv" class="pageContainer">
-            <div class="pageBorder">
-                <textarea id="ListImport" cols="30" rows="30"></textarea>
-                <br>
-                <input type="button" value="Import" onclick="importArmyList();"/>
-            </div>
-        </div>
-        <div id="phaseContainer" class="pageContainer">
-            <div id="phaseBorder" class="pageBorder">
-                <select id="listSel" style="width:150px;" onchange="loadList(this.value);">
-                </select>
-                <input type="button" value="X" onclick="removeSelectedList();" title="Delete selected list"/>
-                <input type="button" value="<" onclick="loadImportText();showPage(PAGES.IMPORT)" title="Load Import Text"/>
-                <input id="debugBtn" type="button" value="Download Errors Debug File" onclick="downloadDebugJson()" style="display:none;">
-                <br>
-                <div id="listView">
-                </div>
-                <div id="phaseScroll" class="scrollBtn">
-                </div>
-                <div id="phaseView">
-                </div>
-                
-            </div>
-        </div>
-        <div id="unitContainer" class="pageContainer">
-            <div id="unitBorder" class="pageBorder">
-                <div id="unitScroll" class="scrollBtn">
-                </div>
-                <div id="unitView">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="sideContainer" style="display: none;">
-        <div id="backPanel" onclick="toggleSidePanel(true);"></div>
-        <div id="sidePanel">
-            <input type="button" class="sidePanelBtn" value="List Import" onclick="showPage(PAGES.IMPORT);toggleSidePanel(true)">
-        </div>
+        <a href="AoSReminder/index.html">AoSReminder</a>
     </div>
 </body>
