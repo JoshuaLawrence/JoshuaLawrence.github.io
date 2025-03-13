@@ -77,10 +77,9 @@ function closeAlert(){
     alertReject.style.display = "none";
     //show the next queued alert
     if(alertQueue.length > 0){
-        let alertParams = alertQueue.unshift();
+        let alertParams = alertQueue.shift();
         setTimeout(()=>{
             createAlert(...alertParams);
-        },500)
-        
+        },500);
     }
 }
