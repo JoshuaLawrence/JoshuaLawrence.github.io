@@ -1,8 +1,8 @@
-
+var map = null;
 
 window.onload = function() {
     createAlert("Hello World");
-    var map = L.map('map',{
+    map = L.map('map',{
         center: [-34.98322204585383, 138.5783569753705],
         zoom:   15    
     });
