@@ -2,6 +2,10 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+#internetActiveIndicator {
+  float: right;
+}
+
 #map { height: 100%; }
 #alertContainer {
   width: 100%;

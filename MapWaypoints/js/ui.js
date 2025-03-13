@@ -4,6 +4,19 @@ window.onload = async function() {
     
     await registerServiceWorker();
 
+    //check online status and set event listeners
+    if(navigator.onLine){
+        internetActiveIndicator.innerText = "Online";
+    }else{
+        internetActiveIndicator.innerText = "Offline";
+    }
+    window.addEventListener("offline", (e) => {
+        internetActiveIndicator.innerText = "Offline";
+    });
+    window.addEventListener("online", (e) => {
+        internetActiveIndicator.innerText = "Online";
+    });
+
     createAlert("Hello World");
     map = L.map('map',{
         center: [-34.98322204585383, 138.5783569753705],
@@ -34,8 +47,6 @@ const registerServiceWorker = async () => {
         }
     }
 };
-
-  
   
 
 let alertQueue = [];
