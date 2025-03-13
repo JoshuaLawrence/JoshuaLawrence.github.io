@@ -14,7 +14,7 @@ window.onload = function() {
 
 function createAlert(msg,acceptText = null,rejectText = null,acceptCallback = null, rejectCallback = null){
     //set the alert message
-    alertMsg.innerHtml = msg;
+    alertMsg.innerText = msg;
 
     //set accept text - default to Ok
     if(acceptText != null){

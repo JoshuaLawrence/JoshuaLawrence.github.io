@@ -28,6 +28,7 @@ body {
 }
 #alertMsg {
   min-height: 50px;
+  align-content: center;
 }
 #alertButtons {
   display: flex;
