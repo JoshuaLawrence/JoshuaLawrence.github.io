@@ -1,6 +1,9 @@
 var map = null;
 
-window.onload = function() {
+window.onload = async function() {
+    
+    await registerServiceWorker();
+
     createAlert("Hello World");
     map = L.map('map',{
         center: [-34.98322204585383, 138.5783569753705],
@@ -11,6 +14,29 @@ window.onload = function() {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 }
+
+//service worker
+const registerServiceWorker = async () => {
+    if ("serviceWorker" in navigator) {
+        try {
+            const registration = await navigator.serviceWorker.register("/js/sw.js", {
+                scope: "/MapWaypoints/",
+            });
+            if (registration.installing) {
+                console.log("Service worker installing");
+            } else if (registration.waiting) {
+                console.log("Service worker installed");
+            } else if (registration.active) {
+                console.log("Service worker active");
+            }
+        } catch (error) {
+            console.error(`Registration failed with ${error}`);
+        }
+    }
+};
+
+  
+  
 
 let alertQueue = [];
 function createAlert(msg,acceptText = null,rejectText = null,acceptCallback = null, rejectCallback = null){
