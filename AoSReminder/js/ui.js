@@ -946,8 +946,10 @@ function createUnitDiv(list,unit){
             containerDiv.appendChild(div);
         }
     });
+    let keywordDiv = document.createElement("div");
+    unitDiv.appendChild(keywordDiv);
 
-
+    keywordDiv.innerHTML = unit.keywords.join("  ");
 
     return unitDiv;
 }
