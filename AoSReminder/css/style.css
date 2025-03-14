@@ -235,4 +235,9 @@ a {
   font-weight: bold;
   text-align: justify;
   padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex-direction: row;
+
 }

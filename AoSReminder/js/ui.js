@@ -946,10 +946,14 @@ function createUnitDiv(list,unit){
             containerDiv.appendChild(div);
         }
     });
-    let keywordDiv = document.createElement("div");
-    containerDiv.appendChild(keywordDiv);
-    keywordDiv.classList.add("keywordsDiv");
-    keywordDiv.innerHTML = unit.keywords.join("  ");
+    let keywordsDiv = document.createElement("div");
+    containerDiv.appendChild(keywordsDiv);
+    keywordsDiv.classList.add("keywordsDiv");
+    unit.keywords.forEach((keyword)=>{
+        let keywordDiv = document.createElement("div");
+        keywordDiv.innerHTML = keyword;
+    });
+    
 
     return unitDiv;
 }
