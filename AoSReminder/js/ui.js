@@ -908,10 +908,11 @@ function displayUnits(list){
         let unitDiv = createUnitDiv(list,unit);
         unitView.appendChild(unitDiv);
     })
-    list.regimentsOfRenown[0].units.forEach((unit)=>{
-        let unitDiv = createUnitDiv(list,unit);
-        unitView.appendChild(unitDiv);
-    })
+    if(list.regimentsOfRenown.length > 0)
+        list.regimentsOfRenown[0].units.forEach((unit)=>{
+            let unitDiv = createUnitDiv(list,unit);
+            unitView.appendChild(unitDiv);
+        })
 }
 
 function createUnitDiv(list,unit){
