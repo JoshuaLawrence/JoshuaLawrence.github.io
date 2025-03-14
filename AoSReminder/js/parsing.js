@@ -171,7 +171,7 @@ function addManifestationsToList(list,entry){
         
         let manifestationName = profile.attributes.name.value.slice(7);
         manifestationName = manifestationName.replace('’',"'");//standardise the symbols
-        list.units.push({unitName:manifestationName,abilities:[],type:"manifestation"});
+        list.units.push({unitName:manifestationName,abilities:[],type:"manifestation",keywords:[]});
     })
 }
 
