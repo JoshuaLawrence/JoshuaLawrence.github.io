@@ -12,6 +12,9 @@ var PROFILE = {};
 //IndexedDB link
 var db;
 
+var showFullUnitAbilities = true; // for showing all unit abilities (even those sorted into categories in the Phases View)
+
+
 const DEBUG = {
     errors:[],
 
@@ -937,7 +940,7 @@ function createUnitDiv(list,unit){
     let _abilities = unit.abilities.sort(sortUnitAbilities);
 
     _abilities.forEach((ability) =>{
-        if(['Melee Weapon','Ranged Weapon', 'Ability (Passive)'].includes(ability.typeName)){
+        if(showFullUnitAbilities || ['Melee Weapon','Ranged Weapon', 'Ability (Passive)'].includes(ability.typeName)){
             let _ability = list.abilities[ability.id];
             let div = createAbilityDiv(_ability,true);
             containerDiv.appendChild(div);
