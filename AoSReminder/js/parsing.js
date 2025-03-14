@@ -228,6 +228,7 @@ function parseAbility(profile){
 }
 
 function parseKeywords(xmlData,unit_idx = null,unit = null){
+    console.log(unit)
     let _keywords = xmlData.querySelectorAll('categoryLinks categoryLink');
     _keywords.forEach((categoryLink)=>{
         //console.log(categoryLink.attributes.name)
