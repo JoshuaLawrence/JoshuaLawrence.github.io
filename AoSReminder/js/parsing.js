@@ -78,7 +78,10 @@ function linkListData(list){
         //get abilities
         //console.log(_unit)
         parseProfiles(list,_unit,unit_idx,unit);
-       
+        
+        //get keywords
+        parseKeywords(_unit,unit_idx,unit);
+
         //add enhancements if unit has any
         if(unit.enhancements){
             
@@ -223,6 +226,16 @@ function parseAbility(profile){
     }
     return ability;
 }
+
+function parseKeywords(xmlData,unit_idx = null,unit = null){
+    let _keywords = xmlData.querySelectorAll('categoryLinks categoryLink');
+    _keywords.forEach((categoryLink)=>{
+        //console.log(categoryLink.attributes.name)
+        let keyword = categoryLink.attributes.name;
+        unit.keyword.push(keyword);
+    })
+}
+
 function sortAbilitiesByPhase(list){
     if(list.phases && false){
         console.log("already sorted",list.phases);

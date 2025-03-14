@@ -577,7 +577,8 @@ function gwParse(importListRaw){
                 importList["units"].push({
                     unitName,
                     abilities:[],
-                    characteristics:{}
+                    characteristics:{},
+                    keywords:[]
                 });
             }
             
