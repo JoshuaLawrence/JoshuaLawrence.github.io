@@ -622,7 +622,7 @@ function gwParse(importListRaw){
             for(i;i<maxParseLength;i++){
                 row = importListRaw[i];
                 if(row.trim() == "") break;
-                importList["units"].push({unitName:row,abilities:[]});
+                importList["units"].push({unitName:row,abilities:[],keywords:[]});
             }
         }
     }
