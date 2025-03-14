@@ -4,7 +4,7 @@ function linkListData(list){
     let _data = data[list.faction];
     list.abilities = {};
     list.parseErrors = [];
-    //battle traits
+    //battle traits - includes spell and prayer lores
     let battleTraitProfiles = _data.rules.querySelectorAll("sharedSelectionEntries selectionEntry profiles profile");
     //console.log(battleTraitProfiles);
     battleTraitProfiles.forEach(profile=>{
@@ -25,37 +25,7 @@ function linkListData(list){
             parseProfiles(list,entry);
         }
     });
-    //Spell Lore
-    if(list.spellLore?.abilities != undefined){
-        let spellLoreEntries = _data.rules.querySelectorAll('selectionEntryGroup[name="Spell Lores"] selectionEntries selectionEntry');
-        //console.log(spellLoreEntries);
-        spellLoreEntries.forEach(entry => {
-            //console.log(entry)
-            let _spellLore = entry.attributes.name.value;
-            if(_spellLore == list.spellLore.name){
-                //console.log("parsing profile " + _spellLore)
-                parseProfiles(list,entry,null,list.spellLore,true);
-            }
-        });
-        if(list.spellLore.abilities.length == 0){
-            logParseError("Spell Lore",list.spellLore.name,list);
-        }
-    }
-    //Prayer Lore
-    if(list.prayerLore?.abilities != undefined){
-        let prayerLoreEntries = _data.rules.querySelectorAll('selectionEntryGroup[name="Prayer Lores"] selectionEntries selectionEntry');
-        //console.log(prayerLoreEntries);
-        prayerLoreEntries.forEach(entry => {
-            //console.log(entry)
-            let _prayerLore = entry.attributes.name.value;
-            if(_prayerLore == list.prayerLore.name){
-                parseProfiles(list,entry,null,list.prayerLore,true);
-            }
-        });
-        if(list.prayerLore.abilities.length == 0){
-            logParseError("Prayer Lore",list.prayerLore.name,list);
-        }
-    }
+   
     //Manifestation Lore
     //console.log(list.manifestationLore)
     if(list.manifestationLore?.abilities != undefined){
