@@ -952,6 +952,7 @@ function createUnitDiv(list,unit){
     unit.keywords.forEach((keyword)=>{
         let keywordDiv = document.createElement("div");
         keywordDiv.innerHTML = keyword;
+        keywordsDiv.appendChild(keywordDiv);
     });
     
 
