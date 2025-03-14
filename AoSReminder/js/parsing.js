@@ -232,7 +232,7 @@ function parseKeywords(xmlData,unit_idx = null,unit = null){
     _keywords.forEach((categoryLink)=>{
         //console.log(categoryLink.attributes.name)
         let keyword = categoryLink.attributes.name;
-        unit.keyword.push(keyword);
+        unit.keywords.push(keyword);
     })
 }
 
