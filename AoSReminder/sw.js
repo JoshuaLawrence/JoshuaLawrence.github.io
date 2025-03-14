@@ -72,7 +72,7 @@ self.addEventListener("install", (event) => {
         "/AoSReminder/icons/favicon.svg",
         "/AoSReminder/icons/web-app-manifest-192x192.png",
         "/AoSReminder/icons/web-app-manifest-512x512.png",
-        "/site.webmanifest"
+        "/AoSReminder/site.webmanifest"
         ]),
     );
 });
