@@ -13,7 +13,7 @@ var PROFILE = {};
 var db;
 
 var showFullUnitAbilities = true; // for showing all unit abilities (even those sorted into categories in the Phases View)
-
+var pageTurnEdgeWidth = 50; // for how wide the gesture start area for turning pages is
 
 const DEBUG = {
     errors:[],
@@ -218,7 +218,7 @@ function handlePageButtonTouchStart(event){
 
     let position = event.touches[0].clientX;
     pageStart = position < window.screen.width/2;
-    if((position > 20)&&(window.screen.width - position > 20))return
+    if((position > pageTurnEdgeWidth)&&(window.screen.width - position > pageTurnEdgeWidth))return
     touchInProgress = true;
 
     var lastPage = document.getElementById(PAGES.getPageID(currentPage));
