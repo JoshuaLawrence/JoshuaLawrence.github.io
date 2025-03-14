@@ -232,7 +232,7 @@ function parseKeywords(xmlData,unit_idx = null,unit = null){
     let _keywords = xmlData.querySelectorAll('categoryLinks categoryLink');
     _keywords.forEach((categoryLink)=>{
         //console.log(categoryLink.attributes.name)
-        let keyword = categoryLink.attributes.name;
+        let keyword = categoryLink.attributes.name.nodeValue;
         unit.keywords.push(keyword);
     })
 }
