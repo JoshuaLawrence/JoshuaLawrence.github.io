@@ -948,7 +948,7 @@ function createUnitDiv(list,unit){
     });
     let keywordDiv = document.createElement("div");
     containerDiv.appendChild(keywordDiv);
-
+    keywordDiv.classList.add("keywordsDiv");
     keywordDiv.innerHTML = unit.keywords.join("  ");
 
     return unitDiv;

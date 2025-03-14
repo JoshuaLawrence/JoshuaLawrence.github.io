@@ -231,3 +231,8 @@ a {
   top: 8px;
   line-height: .8;
 }
+.keywordsDiv {
+  font-weight: bold;
+  text-align: justify;
+  padding: 5px;
+}
