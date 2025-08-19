@@ -87,9 +87,8 @@ async function loadResource(res_url,returnRaw){
 async function loadXMLDataFromStorage(dataName){
     if(LOAD_VERBOSE)console.log("attempting to load " + dataName)
     let _data = await dbGet("data","name",dataName);
-    //console.log("loaded",_data)
+    //console.log(dataName+":loaded1",_data)
     try{
-        
         let now = new Date().getTime();
         //check if the data needs updating
         if(now-_data.DT > CACHE_UPDATE_TIME){
@@ -97,13 +96,17 @@ async function loadXMLDataFromStorage(dataName){
             _data = null;
         }else{
             if(LOAD_VERBOSE)console.log("Loading "+dataName+" data from browser storage.");
-            _data = parseXml(_data.data);
+            if(["core","Regiments of Renown"].includes(dataName)){
+                _data = parseXml(_data.data);
+            }else{
+                _data = _data.data;
+            }
         }
     }catch(e){
-        //console.log(e);
+        console.log(dataName,e);
         _data = null;
     }
-    //console.log("loaded",_data)
+    //console.log("loaded2",_data)
     
     return _data;
     
@@ -127,7 +130,9 @@ async function loadCore(force=false){
     }else{
         data.core = core;
     }
+
     if(LOAD_DEBUG)console.log(data.core)
+
     let publications = data.core.querySelector("publications").children;
     parsedData["Factions"] = [];
     for(let i = 0; i < publications.length;i++){
@@ -186,23 +191,9 @@ function loadRoRLibs(){
     libSources.forEach(async catLink=>{
         
         let resName = catLink.attributes.name.value;
-        let faction = resName.split('-')[0].trim();
-        let lib = await loadXMLDataFromStorage(faction+"_units");
-        
-        if(lib){
-            if(!data[faction])data[faction] = {};
-
-            data[faction].units = lib;
-            return;
-        }
-
-        let res = await loadResource(encodeURI(resName),true);
-        
-        if(!data[faction])data[faction] = {};
-        data[faction].units = parseXml(res);
-        console.log(faction,res.length);
-        storeResourceInDB(faction+"_units",res);
-        //localStorage.setItem(faction+"_units",JSON.stringify({"DT":new Date().getTime(),"data":res}));
+        let faction = resName.split(' -')[0].trim();
+        loadFaction(faction);
+        return;
     })
 }
 
@@ -215,41 +206,32 @@ async function loadFaction(faction = null, force=false){
     if(data[factionName]?.rules && !force)return console.log("Already have " + factionName + " in Cache.");
     
     if(!data[factionName])data[factionName] = {};
-    let rules,units;
+    let _factionData;
 
     //if forcing an update - dont even try to get it from storage
-    if(!force){
-        rules = await loadXMLDataFromStorage(factionName+"_rules");
-        units = await loadXMLDataFromStorage(factionName+"_units");
+    if(!force ){
+        _factionData = await loadXMLDataFromStorage(factionName);
+        
     }
-    
-    if(rules){
-        //console.log("rules",rules)
-        data[factionName]["rules"] = rules;
-    }
-    if(units){
-        //console.log("units",units)
-        data[factionName]["units"] = units;
-    }
-
+ 
     //if both rules and units were fetched, we can return;
-    if(rules && units){
+    if(_factionData){
+        parsedData[factionName] = _factionData;
         return;
     }
 
     console.log("Retrieving BSData for " + factionName);
 
-    if(!rules){
-        rules = await loadResource(faction,true);
-        data[factionName]["rules"] = parseXml(rules);
-        storeResourceInDB(factionName+"_rules",rules);
-    }
-    if(!units){
-        units = await loadResource(faction + '%20-%20Library',true);
-        data[factionName]["units"] = parseXml(units);
-        storeResourceInDB(factionName+"_units",units);
-    }
 
+    let rulesRaw = await loadResource(faction,true);
+    let rules = data[factionName]["rules"] = parseXml(rulesRaw);
+    parseBSDataXML(factionName,rules);
+
+    let unitsRaw = await loadResource(faction + '%20-%20Library',true);
+    let units = data[factionName]["units"] = parseXml(unitsRaw);
+    parseBSDataXML(factionName,units);
+
+    storeResourceInDB(factionName,parsedData[factionName]);
     //console.log(blob);
     
    
