@@ -1,3 +1,72 @@
+//can take faction rules and units xml documents from BS Data - TODO: add prayer, spell and manifestation lores
+function parseBSDataXML(faction,xml){
+    function parseXmlProfile(profileXml){
+        
+        let attrs = profileXml.querySelectorAll('attribute');
+        let chars = profileXml.querySelectorAll('characteristic')
+        let profile = {};
+        attrs.forEach(attr=>profile[attr.attributes.name.nodeValue]=attr.innerHTML)
+        chars.forEach(char=>profile[char.attributes.name.nodeValue]=char.innerHTML)
+        return profile;
+    }
+    function parseAbilityGroupXml(_obj,node,selector){
+        let abilityType = node.attributes.name.nodeValue;
+        let abilities = {};
+        node.querySelectorAll(selector).forEach(abilityXml=>{
+            let abilityName = abilityXml.attributes.name.nodeValue;
+            abilities[abilityName] = parseXmlProfile(abilityXml);
+        })
+        _obj[abilityType]=abilities;
+    }
+
+    let factionData={};
+    //battle factions, heroic traits, artefacts 
+    xml.querySelectorAll('sharedSelectionEntryGroups>selectionEntryGroup').forEach(node=>{
+        //only selectionEntryGroup nodes with profiles are what we're looking for
+        if(!node.querySelector('profiles')){return;}
+        parseAbilityGroupXml(factionData,node,'selectionEntryGroup selectionEntry') 
+    })
+    
+    //battle traits
+    xml.querySelectorAll('sharedSelectionEntries>selectionEntry[type="upgrade"]').forEach(node=>{
+        parseAbilityGroupXml(factionData,node,'profile');     
+    });
+
+    //units
+    let units = {};
+    xml.querySelectorAll('sharedSelectionEntries>selectionEntry[type="unit"]').forEach(node=>{
+        let unitName = node.attributes.name.nodeValue;
+        let unit = {}; 
+        node.querySelectorAll('profile').forEach(subnode=>{
+            let name = subnode.attributes.name.nodeValue;
+            let type = subnode.attributes.typeName.nodeValue;
+
+            if(type=="Unit"){
+                unit["stats"] = parseXmlProfile(subnode);
+            }else{
+                if(!unit[type])
+                    unit[type]={};
+                unit[type][name] = parseXmlProfile(subnode);
+            }       
+        })
+        //extract unit keywords
+        unit["keywords"]=[];
+        node.querySelectorAll('categoryLink').forEach(subnode=>{
+            unit["keywords"].push(subnode.attributes.name.nodeValue);
+        })
+        units[unitName]=unit;
+    })
+    if(Object.keys(units).length != 0)
+    factionData["units"]=units;
+
+    if(!parsedData[faction])parsedData[faction]={};
+    Object.assign(parsedData[faction],factionData);
+    console.log(factionData);
+
+}
+
+
+
 //link the list data to the 
 function linkListData(list){
     //console.log(list);
